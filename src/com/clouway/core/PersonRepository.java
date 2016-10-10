@@ -1,5 +1,7 @@
 package com.clouway.core;
 
+import java.util.List;
+
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
@@ -8,6 +10,10 @@ public interface PersonRepository {
 
   void delete(Person person);
 
-  void updateAge(Integer egn, String field, Integer age);
+  Person find(Integer egn);
+
+  List<Person> findAll(String letter);
+
+  void updateAge(Integer egn, Integer newAge);
 
 }
