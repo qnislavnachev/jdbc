@@ -17,4 +17,14 @@ public class Trip {
     this.departure = departure;
     this.city = city;
   }
+
+  @Override
+  public String toString() {
+    return "Trip{" +
+            "egn=" + egn +
+            ", arrival=" + arrival +
+            ", departure=" + departure +
+            ", city='" + city + '\'' +
+            '}';
+  }
 }

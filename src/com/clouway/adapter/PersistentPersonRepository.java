@@ -62,14 +62,19 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void updateAge(Integer egn, String field, Integer age) {
+  public Person find(Integer EGN) {
     Connection connection = provider.get();
-    String query = "UPDATE PEOPLE SET (?) = (?) WHERE EGN= (?)";
+    String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, field);
-      preparedStatement.setInt(2, age);
-      preparedStatement.setInt(3, egn);
-      preparedStatement.execute();
+      preparedStatement.setInt(1, EGN);
+      ResultSet rs = preparedStatement.executeQuery(query);
+      rs.next();
+      String name = rs.getString(1);
+      Integer egn = rs.getInt(2);
+      Integer age = rs.getInt(3);
+      String email = rs.getString(4);
+      return new Person(name, egn, age, email);
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -79,10 +84,11 @@ public class PersistentPersonRepository implements PersonRepository {
         e.printStackTrace();
       }
     }
+    return null;
   }
 
-  //Showing off Like Find Display Drop Alter
-  public List<Person> findPeopleStartingWithLetter(String letter) {
+  @Override
+  public List<Person> findAll(String letter) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE '(?)%%%'";
     List<Person> result = new LinkedList<>();
@@ -108,39 +114,14 @@ public class PersistentPersonRepository implements PersonRepository {
     return result;
   }
 
-  public Person findByEGN(Integer EGN) {
+  @Override
+  public List<Person> display() {
     Connection connection = provider.get();
-    String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, EGN);
-      ResultSet rs = preparedStatement.executeQuery(query);
-      rs.next();
-      String name = rs.getString(1);
-      Integer egn = rs.getInt(2);
-      Integer age = rs.getInt(3);
-      String email = rs.getString(4);
-      return new Person(name, egn, age, email);
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return null;
-  }
-
-  public List<Person> display(String table) {
-    Connection connection = provider.get();
-    String query = "SELECT * FROM (?)";
+    String query = "SELECT * FROM PEOPLE";
     List<Person> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       ResultSet rs = preparedStatement.executeQuery(query);
       while (rs.next()) {
-        preparedStatement.setString(1, table);
         String name = rs.getString(1);
         Integer egn = rs.getInt(2);
         Integer age = rs.getInt(3);
@@ -159,27 +140,19 @@ public class PersistentPersonRepository implements PersonRepository {
     return result;
   }
 
-  public void dropTable(String table) {
+  public void deleteTableContents() {
     Connection connection = provider.get();
-    String query = "DROP TABLE (?)";
+    String query = "DELETE FROM PEOPLE";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, table);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
-    }
-  }
-
-  public void addColumn(String table, String columnName, String type) {
-    Connection connection = provider.get();
-    String query = "ALTER TABLE (?) ADD (?) (?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1,table);
-      preparedStatement.setString(2,columnName);
-      preparedStatement.setString(3,type);
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
+    } finally {
+      try {
+        connection.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
 }

@@ -1,5 +1,7 @@
 package com.clouway.core;
 
+import java.util.List;
+
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
@@ -10,4 +12,7 @@ public interface TripRepository {
 
   Trip find(Integer egn);
 
+  List<City> mostVisited();
+
+  List<Trip> display();
 }

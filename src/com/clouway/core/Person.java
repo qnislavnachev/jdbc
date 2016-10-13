@@ -15,4 +15,14 @@ public class Person {
     this.age = age;
     this.email = email;
   }
+
+  @Override
+  public String toString() {
+    return "Person{" +
+            "name='" + name + '\'' +
+            ", egn=" + egn +
+            ", age=" + age +
+            ", email='" + email + '\'' +
+            '}';
+  }
 }
