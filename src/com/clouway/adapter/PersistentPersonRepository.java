@@ -3,6 +3,7 @@ package com.clouway.adapter;
 import com.clouway.core.Person;
 import com.clouway.core.PersonRepository;
 import com.clouway.core.Provider;
+import com.clouway.core.TableManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -62,9 +64,10 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Person find(Integer EGN) {
+  public Optional<Person> find(Integer EGN) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
+    Optional<Person> result = Optional.empty();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setInt(1, EGN);
       ResultSet rs = preparedStatement.executeQuery(query);
@@ -73,8 +76,7 @@ public class PersistentPersonRepository implements PersonRepository {
       Integer egn = rs.getInt(2);
       Integer age = rs.getInt(3);
       String email = rs.getString(4);
-      return new Person(name, egn, age, email);
-
+      result = Optional.of(new Person(name, egn, age, email));
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -84,7 +86,7 @@ public class PersistentPersonRepository implements PersonRepository {
         e.printStackTrace();
       }
     }
-    return null;
+    return result;
   }
 
   @Override
@@ -130,57 +132,6 @@ public class PersistentPersonRepository implements PersonRepository {
       } catch (SQLException e) {
         e.printStackTrace();
       }
-    }
-  }
-
-  //Showing off Display Drop Alter
-  public List<Person> display(String table) {
-    Connection connection = provider.get();
-    String query = "SELECT * FROM (?)";
-    List<Person> result = new LinkedList<>();
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet rs = preparedStatement.executeQuery(query);
-      while (rs.next()) {
-        preparedStatement.setString(1, table);
-        String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
-        Integer age = rs.getInt(3);
-        String email = rs.getString(4);
-        result.add(new Person(name, egn, age, email));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return result;
-  }
-
-  public void dropTable(String table) {
-    Connection connection = provider.get();
-    String query = "DROP TABLE (?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, table);
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void addColumn(String table, String columnName, String type) {
-    Connection connection = provider.get();
-    String query = "ALTER TABLE (?) ADD (?) (?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, table);
-      preparedStatement.setString(2, columnName);
-      preparedStatement.setString(3, type);
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
   }
 }
