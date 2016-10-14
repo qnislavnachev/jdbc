@@ -4,11 +4,13 @@ import com.clouway.adapter.ConnectionProvider;
 import com.clouway.adapter.PersistentPersonRepository;
 import com.clouway.adapter.PersistentTripRepository;
 import com.clouway.core.Person;
-import com.clouway.core.Trip;
 import org.junit.Before;
 import org.junit.Test;
 
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -22,16 +24,15 @@ public class TravelAgencyTest {
   Person person1=new Person("Vasko",1111111111,25,"pojoemail@object.com");
   Person person2=new Person("Denis",1111111112,23,"pojoemail@object.com");
   Person person3=new Person("Qnislav",1111111113,24,"pojoemail@object.com");
-  Trip trip1=new Trip(1111111111,)
 
   @Before
-  void cleanup(){
+  public void cleanup(){
     travelAgency.cleanup();
   }
 
   @Test
   public void registryTest() throws Exception {
-
-
+    travelAgency.registerClient(person1);
+    assertThat(travelAgency.findClient(person1.egn),is(person1));
   }
 }

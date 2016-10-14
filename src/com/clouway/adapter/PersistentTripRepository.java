@@ -48,7 +48,7 @@ public class PersistentTripRepository implements TripRepository {
   @Override
   public void delete(Trip trip) {
     Connection connection = provider.get();
-    String query = "DELETE FROM TRIP WHERE EGN=(?)";
+    String query = "DELETE FROM TRIP WHERE EGN= ?";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setInt(1, trip.egn);
       preparedStatement.execute();
@@ -66,9 +66,9 @@ public class PersistentTripRepository implements TripRepository {
   @Override
   public Trip find(Integer egn) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM TRIP WHERE EGN=(?)";
+    String query = "SELECT * FROM TRIP WHERE NAME= ? ";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, egn);
+      preparedStatement.setString(1, "Vasko");
       ResultSet resultSet = preparedStatement.executeQuery(query);
       Integer EGN = resultSet.getInt(1);
       Date arrival = resultSet.getDate(2);

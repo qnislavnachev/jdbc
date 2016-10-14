@@ -64,16 +64,23 @@ public class PersistentPersonRepository implements PersonRepository {
   @Override
   public Person find(Integer EGN) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+    String query = "SELECT * FROM PEOPLE WHERE EGN= ?";
+    PreparedStatement preparedStatement = null;
+    try {
+      preparedStatement = connection.prepareStatement(query);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    try  {
       preparedStatement.setInt(1, EGN);
       ResultSet rs = preparedStatement.executeQuery(query);
-      rs.next();
-      String name = rs.getString(1);
-      Integer egn = rs.getInt(2);
-      Integer age = rs.getInt(3);
-      String email = rs.getString(4);
-      return new Person(name, egn, age, email);
+      while (rs.next()) {
+        String name = rs.getString(1);
+        Integer egn = rs.getInt(2);
+        Integer age = rs.getInt(3);
+        String email = rs.getString(4);
+        return new Person(name, egn, age, email);
+      }
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -94,7 +101,7 @@ public class PersistentPersonRepository implements PersonRepository {
     List<Person> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, letter);
-      ResultSet rs = preparedStatement.executeQuery(query);
+      ResultSet rs = preparedStatement.getResultSet();
       while (rs.next()) {
         String name = rs.getString(1);
         Integer egn = rs.getInt(2);
@@ -120,7 +127,7 @@ public class PersistentPersonRepository implements PersonRepository {
     String query = "SELECT * FROM PEOPLE";
     List<Person> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet rs = preparedStatement.executeQuery(query);
+      ResultSet rs = preparedStatement.getResultSet();
       while (rs.next()) {
         String name = rs.getString(1);
         Integer egn = rs.getInt(2);

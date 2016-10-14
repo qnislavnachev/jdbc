@@ -28,6 +28,10 @@ public class TravelAgency {
     personRepository.register(person);
   }
 
+  public Person findClient(Integer egn){
+    return personRepository.find(egn);
+  }
+
   public void registerTrip(Trip trip) {
     tripRepository.register(trip);
   }
@@ -53,8 +57,8 @@ public class TravelAgency {
   }
 
   public void cleanup(){
-    personRepository.deleteTableContents();
     tripRepository.deleteTableContents();
+    personRepository.deleteTableContents();
   }
 
 }

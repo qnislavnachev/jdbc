@@ -27,4 +27,27 @@ public class Trip {
             ", city='" + city + '\'' +
             '}';
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Trip trip = (Trip) o;
+
+    if (egn != null ? !egn.equals(trip.egn) : trip.egn != null) return false;
+    if (arrival != null ? !arrival.equals(trip.arrival) : trip.arrival != null) return false;
+    if (departure != null ? !departure.equals(trip.departure) : trip.departure != null) return false;
+    return city != null ? city.equals(trip.city) : trip.city == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = egn != null ? egn.hashCode() : 0;
+    result = 31 * result + (arrival != null ? arrival.hashCode() : 0);
+    result = 31 * result + (departure != null ? departure.hashCode() : 0);
+    result = 31 * result + (city != null ? city.hashCode() : 0);
+    return result;
+  }
 }
