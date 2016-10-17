@@ -29,10 +29,10 @@ public class PersistentPersonTableManager implements TableManager {
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       ResultSet rs = preparedStatement.executeQuery(query);
       while (rs.next()) {
-        String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
-        Integer age = rs.getInt(3);
-        String email = rs.getString(4);
+        String name = rs.getString(2);
+        String egn = rs.getString(3);
+        Integer age = rs.getInt(4);
+        String email = rs.getString(5);
         result.add(new Person(name, egn, age, email));
       }
     } catch (SQLException e) {

@@ -27,10 +27,10 @@ public class PersistentPersonRepository implements PersonRepository {
   @Override
   public void register(Person person) {
     Connection connection = provider.get();
-    String query = "INSERT INTO PEOPLE VALUES(?,?,?,?)";
+    String query = "INSERT INTO PEOPLE (NAME,EGN,AGE,EMAIL) VALUES (?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, person.name);
-      preparedStatement.setInt(2, person.egn);
+      preparedStatement.setString(2, person.egn);
       preparedStatement.setInt(3, person.age);
       preparedStatement.setString(4, person.email);
       preparedStatement.execute();
@@ -50,7 +50,7 @@ public class PersistentPersonRepository implements PersonRepository {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, person.egn);
+      preparedStatement.setString(1, person.egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -64,18 +64,18 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Optional<Person> find(Integer EGN) {
+  public Optional<Person> find(String EGN) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
     Optional<Person> result = Optional.empty();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, EGN);
+      preparedStatement.setString(1, EGN);
       ResultSet rs = preparedStatement.executeQuery(query);
       rs.next();
-      String name = rs.getString(1);
-      Integer egn = rs.getInt(2);
-      Integer age = rs.getInt(3);
-      String email = rs.getString(4);
+      String name = rs.getString(2);
+      String egn = rs.getString(3);
+      Integer age = rs.getInt(4);
+      String email = rs.getString(5);
       result = Optional.of(new Person(name, egn, age, email));
     } catch (SQLException e) {
       e.printStackTrace();
@@ -98,10 +98,10 @@ public class PersistentPersonRepository implements PersonRepository {
       preparedStatement.setString(1, letter);
       ResultSet rs = preparedStatement.executeQuery(query);
       while (rs.next()) {
-        String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
-        Integer age = rs.getInt(3);
-        String email = rs.getString(4);
+        String name = rs.getString(2);
+        String egn = rs.getString(3);
+        Integer age = rs.getInt(4);
+        String email = rs.getString(5);
         result.add(new Person(name, egn, age, email));
       }
     } catch (SQLException e) {
@@ -117,12 +117,12 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void updateAge(Integer egn, Integer newAge) {
+  public void updateAge(String egn, Integer newAge) {
     Connection connection = provider.get();
     String query = "UPDATE PEOPLE SET AGE = (?) WHERE EGN= (?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setInt(1, newAge);
-      preparedStatement.setInt(2, egn);
+      preparedStatement.setString(2, egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();

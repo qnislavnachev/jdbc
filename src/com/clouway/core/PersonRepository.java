@@ -11,10 +11,10 @@ public interface PersonRepository {
 
   void delete(Person person);
 
-  Optional<Person> find(Integer egn);
+  Optional<Person> find(String egn);
 
   List<Person> findAll(String letter);
 
-  void updateAge(Integer egn, Integer newAge);
+  void updateAge(String egn, Integer newAge);
 
 }
