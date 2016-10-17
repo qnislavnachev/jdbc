@@ -12,14 +12,6 @@ public class City {
     this.visited=visited;
   }
 
-  public void visit() {
-    visited++;
-  }
-
-  public Integer getVisited() {
-    return visited;
-  }
-
   @Override
   public String toString() {
     return "City{" +

@@ -28,7 +28,7 @@ public class PersistentTripRepository implements TripRepository {
     Connection connection = provider.get();
     String query = "INSERT INTO TRIP VALUES(?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, trip.egn);
+      preparedStatement.setString(1, trip.egn);
       preparedStatement.setDate(2, trip.arrival);
       preparedStatement.setDate(3, trip.departure);
       preparedStatement.setString(4, trip.city);
@@ -50,7 +50,7 @@ public class PersistentTripRepository implements TripRepository {
     Connection connection = provider.get();
     String query = "DELETE FROM TRIP WHERE EGN= ?";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, trip.egn);
+      preparedStatement.setString(1, trip.egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -64,13 +64,13 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public Trip find(Integer egn) {
+  public Trip find(String egn) {
     Connection connection = provider.get();
     String query = "SELECT * FROM TRIP WHERE NAME= ? ";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, "Vasko");
       ResultSet resultSet = preparedStatement.executeQuery(query);
-      Integer EGN = resultSet.getInt(1);
+      String EGN = resultSet.getString(1);
       Date arrival = resultSet.getDate(2);
       Date departure = resultSet.getDate(3);
       String city = resultSet.getString(4);
@@ -121,7 +121,7 @@ public class PersistentTripRepository implements TripRepository {
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       ResultSet rs = preparedStatement.executeQuery(query);
       while (rs.next()) {
-        Integer egn = rs.getInt(1);
+        String egn = rs.getString(1);
         Date arrival = rs.getDate(2);
         Date departure = rs.getDate(3);
         String city = rs.getString(4);

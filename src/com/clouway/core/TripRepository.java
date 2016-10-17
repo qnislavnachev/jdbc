@@ -10,7 +10,7 @@ public interface TripRepository {
 
   void delete(Trip trip);
 
-  Trip find(Integer egn);
+  Trip find(String egn);
 
   List<City> mostVisited();
 

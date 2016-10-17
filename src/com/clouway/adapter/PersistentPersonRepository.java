@@ -28,7 +28,7 @@ public class PersistentPersonRepository implements PersonRepository {
     String query = "INSERT INTO PEOPLE VALUES(?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, person.name);
-      preparedStatement.setInt(2, person.egn);
+      preparedStatement.setString(2, person.egn);
       preparedStatement.setInt(3, person.age);
       preparedStatement.setString(4, person.email);
       preparedStatement.execute();
@@ -48,7 +48,7 @@ public class PersistentPersonRepository implements PersonRepository {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setInt(1, person.egn);
+      preparedStatement.setString(1, person.egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -62,7 +62,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Person find(Integer EGN) {
+  public Person find(String EGN) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN= ?";
     PreparedStatement preparedStatement = null;
@@ -72,11 +72,11 @@ public class PersistentPersonRepository implements PersonRepository {
       e.printStackTrace();
     }
     try  {
-      preparedStatement.setInt(1, EGN);
+      preparedStatement.setString(1, EGN);
       ResultSet rs = preparedStatement.executeQuery(query);
       while (rs.next()) {
         String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
+        String egn = rs.getString(2);
         Integer age = rs.getInt(3);
         String email = rs.getString(4);
         return new Person(name, egn, age, email);
@@ -104,7 +104,7 @@ public class PersistentPersonRepository implements PersonRepository {
       ResultSet rs = preparedStatement.getResultSet();
       while (rs.next()) {
         String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
+        String egn = rs.getString(2);
         Integer age = rs.getInt(3);
         String email = rs.getString(4);
         result.add(new Person(name, egn, age, email));
@@ -130,7 +130,7 @@ public class PersistentPersonRepository implements PersonRepository {
       ResultSet rs = preparedStatement.getResultSet();
       while (rs.next()) {
         String name = rs.getString(1);
-        Integer egn = rs.getInt(2);
+        String egn = rs.getString(2);
         Integer age = rs.getInt(3);
         String email = rs.getString(4);
         result.add(new Person(name, egn, age, email));

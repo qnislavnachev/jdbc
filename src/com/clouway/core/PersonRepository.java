@@ -10,7 +10,7 @@ public interface PersonRepository {
 
   void delete(Person person);
 
-  Person find(Integer egn);
+  Person find(String egn);
 
   List<Person> findAll(String letter);
 

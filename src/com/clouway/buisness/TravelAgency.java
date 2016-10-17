@@ -28,7 +28,7 @@ public class TravelAgency {
     personRepository.register(person);
   }
 
-  public Person findClient(Integer egn){
+  public Person findClient(String egn){
     return personRepository.find(egn);
   }
 
