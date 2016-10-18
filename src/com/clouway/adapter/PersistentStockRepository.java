@@ -45,6 +45,7 @@ public class PersistentStockRepository implements StockRepository {
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setDouble(1, newQuantity);
       preparedStatement.setString(2, name);
+      preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
