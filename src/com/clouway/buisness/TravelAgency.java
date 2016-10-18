@@ -9,13 +9,13 @@ import com.clouway.core.Trip;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Optional;
 import java.util.zip.CheckedInputStream;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
 public class TravelAgency {
-  private Provider<Connection> provider;
   private PersistentPersonRepository personRepository;
   private PersistentTripRepository tripRepository;
 
@@ -28,8 +28,16 @@ public class TravelAgency {
     personRepository.register(person);
   }
 
-  public Person findClient(String egn){
-    return personRepository.find(egn);
+  public Person findClient(String egn) {
+    return personRepository.find(egn).get();
+  }
+
+  public Trip findTrip(String egn) {
+    return tripRepository.find(egn).get();
+  }
+
+  public List<Person> findClientsStartingWithLetter(String letter) {
+    return personRepository.findAll(letter);
   }
 
   public void registerTrip(Trip trip) {
@@ -56,9 +64,5 @@ public class TravelAgency {
     return personRepository.findAll(letter);
   }
 
-  public void cleanup(){
-    tripRepository.deleteTableContents();
-    personRepository.deleteTableContents();
-  }
 
 }

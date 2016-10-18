@@ -11,6 +11,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -62,24 +63,18 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Person find(String EGN) {
+  public Optional<Person> find(String EGN) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM PEOPLE WHERE EGN= ?";
-    PreparedStatement preparedStatement = null;
-    try {
-      preparedStatement = connection.prepareStatement(query);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    try  {
-      preparedStatement.setString(1, EGN);
-      ResultSet rs = preparedStatement.executeQuery(query);
+    String query = "SELECT * FROM PEOPLE WHERE EGN="+EGN;
+    Optional result=Optional.empty();
+    try(PreparedStatement preparedStatement=connection.prepareStatement(query))  {
+      ResultSet rs = preparedStatement.executeQuery();
       while (rs.next()) {
         String name = rs.getString(1);
         String egn = rs.getString(2);
         Integer age = rs.getInt(3);
         String email = rs.getString(4);
-        return new Person(name, egn, age, email);
+        result=Optional.of(new Person(name, egn, age, email));
       }
 
     } catch (SQLException e) {
@@ -91,17 +86,17 @@ public class PersistentPersonRepository implements PersonRepository {
         e.printStackTrace();
       }
     }
-    return null;
+    return result;
   }
 
   @Override
   public List<Person> findAll(String letter) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM PEOPLE WHERE NAME LIKE '(?)%%%'";
+    String query = "SELECT * FROM PEOPLE WHERE NAME LIKE ?";
     List<Person> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, letter);
-      ResultSet rs = preparedStatement.getResultSet();
+      preparedStatement.setString(1,letter+"%");
+      ResultSet rs = preparedStatement.executeQuery();
       while (rs.next()) {
         String name = rs.getString(1);
         String egn = rs.getString(2);
@@ -127,7 +122,7 @@ public class PersistentPersonRepository implements PersonRepository {
     String query = "SELECT * FROM PEOPLE";
     List<Person> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet rs = preparedStatement.getResultSet();
+      ResultSet rs = preparedStatement.executeQuery();
       while (rs.next()) {
         String name = rs.getString(1);
         String egn = rs.getString(2);
@@ -145,22 +140,6 @@ public class PersistentPersonRepository implements PersonRepository {
       }
     }
     return result;
-  }
-
-  public void deleteTableContents() {
-    Connection connection = provider.get();
-    String query = "DELETE FROM PEOPLE";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
   }
 }
 

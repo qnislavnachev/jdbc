@@ -1,5 +1,6 @@
 package com.clouway.core;
 
+
 import java.sql.Date;
 
 /**
@@ -36,8 +37,8 @@ public class Trip {
     Trip trip = (Trip) o;
 
     if (egn != null ? !egn.equals(trip.egn) : trip.egn != null) return false;
-    if (arrival != null ? !arrival.equals(trip.arrival) : trip.arrival != null) return false;
-    if (departure != null ? !departure.equals(trip.departure) : trip.departure != null) return false;
+   if (arrival.toString() != null ? !arrival.toString().equals(trip.arrival.toString()) : trip.arrival.toString() != null) return false;
+   if (departure.toString() != null ? !departure.toString().equals(trip.departure.toString()) : trip.departure.toString() != null) return false;
     return city != null ? city.equals(trip.city) : trip.city == null;
 
   }

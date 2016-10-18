@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -64,17 +65,19 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public Trip find(String egn) {
+  public Optional<Trip> find(String egn) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM TRIP WHERE NAME= ? ";
+    Optional result=Optional.empty();
+    String query = "SELECT * FROM TRIP WHERE EGN ="+egn;
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, "Vasko");
       ResultSet resultSet = preparedStatement.executeQuery(query);
-      String EGN = resultSet.getString(1);
-      Date arrival = resultSet.getDate(2);
-      Date departure = resultSet.getDate(3);
-      String city = resultSet.getString(4);
-      return new Trip(EGN, arrival, departure, city);
+      while (resultSet.next()) {
+        String EGN = resultSet.getString(1);
+        Date arrival = resultSet.getDate(2);
+        Date departure = resultSet.getDate(3);
+        String city = resultSet.getString(4);
+        result = Optional.of(new Trip(EGN, arrival, departure, city));
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -84,7 +87,7 @@ public class PersistentTripRepository implements TripRepository {
         e.printStackTrace();
       }
     }
-    return null;
+    return result;
   }
 
   @Override
@@ -119,7 +122,7 @@ public class PersistentTripRepository implements TripRepository {
     String query = "SELECT * FROM TRIP";
     List<Trip> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet rs = preparedStatement.executeQuery(query);
+      ResultSet rs = preparedStatement.executeQuery();
       while (rs.next()) {
         String egn = rs.getString(1);
         Date arrival = rs.getDate(2);
@@ -137,20 +140,5 @@ public class PersistentTripRepository implements TripRepository {
       }
     }
     return result;
-  }
-  public void deleteTableContents() {
-    Connection connection = provider.get();
-    String query = "DELETE FROM TRIP";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
   }
 }
