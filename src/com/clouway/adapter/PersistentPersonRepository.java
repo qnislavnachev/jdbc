@@ -25,7 +25,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void register(Person person) {
+  public void register(Person person) throws SQLException {
     Connection connection = provider.get();
     String query = "INSERT INTO PEOPLE (NAME,EGN,AGE,EMAIL) VALUES (?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -46,7 +46,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void delete(String egn) {
+  public void delete(String egn) throws SQLException {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -64,10 +64,9 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Optional<Person> find(String EGN) {
+  public Optional<Person> find(String EGN) throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
-    Optional<Person> result = Optional.empty();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, EGN);
       ResultSet rs = preparedStatement.executeQuery(query);
@@ -76,7 +75,7 @@ public class PersistentPersonRepository implements PersonRepository {
       String egn = rs.getString(3);
       Integer age = rs.getInt(4);
       String email = rs.getString(5);
-      result = Optional.of(new Person(name, egn, age, email));
+      return Optional.of(new Person(name, egn, age, email));
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -86,11 +85,11 @@ public class PersistentPersonRepository implements PersonRepository {
         e.printStackTrace();
       }
     }
-    return result;
+    return Optional.empty();
   }
 
   @Override
-  public List<Person> findAllStartingWith(String letter) {
+  public List<Person> findAllStartingWith(String letter) throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE '(?)%%%'";
     List<Person> result = new LinkedList<>();
@@ -117,7 +116,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void updateAge(String egn, Integer newAge) {
+  public void updateAge(String egn, Integer newAge) throws SQLException {
     Connection connection = provider.get();
     String query = "UPDATE PEOPLE SET AGE = (?) WHERE EGN= (?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
