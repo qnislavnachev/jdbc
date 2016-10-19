@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface PersonRepository {
   void register(Person person);
 
-  void delete(Person person);
+  void delete(String egn);
 
   Optional<Person> find(String egn);
 
-  List<Person> findAll(String letter);
+  List<Person> findAllStartingWith(String letter);
 
   void updateAge(String egn, Integer newAge);
 
