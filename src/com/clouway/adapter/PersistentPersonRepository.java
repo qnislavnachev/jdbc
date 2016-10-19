@@ -46,11 +46,11 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void delete(Person person) {
+  public void delete(String egn) {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, person.egn);
+      preparedStatement.setString(1,egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -90,7 +90,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public List<Person> findAll(String letter) {
+  public List<Person> findAllStartingWith(String letter) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE '(?)%%%'";
     List<Person> result = new LinkedList<>();
