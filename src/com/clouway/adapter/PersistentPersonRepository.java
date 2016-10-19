@@ -24,7 +24,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void register(Person person) {
+  public void register(Person person) throws SQLException {
     Connection connection = provider.get();
     String query = "INSERT INTO PEOPLE VALUES(?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -45,11 +45,11 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void delete(Person person) {
+  public void delete(String egn) throws SQLException {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, person.egn);
+      preparedStatement.setString(1,egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -63,7 +63,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Optional<Person> find(String EGN) {
+  public Optional<Person> find(String EGN) throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN="+EGN;
     Optional result=Optional.empty();
@@ -90,7 +90,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public List<Person> findAllStartingWith(String letter) {
+  public List<Person> findAllStartingWith(String letter) throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE ?";
     List<Person> result = new LinkedList<>();
@@ -117,7 +117,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public List<Person> display() {
+  public List<Person> display() throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE";
     List<Person> result = new LinkedList<>();

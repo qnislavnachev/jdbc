@@ -25,7 +25,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public void register(Trip trip) {
+  public void register(Trip trip) throws SQLException {
     Connection connection = provider.get();
     String query = "INSERT INTO TRIP VALUES(?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -47,11 +47,11 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public void delete(Trip trip) {
+  public void delete(String egn) throws SQLException {
     Connection connection = provider.get();
     String query = "DELETE FROM TRIP WHERE EGN= ?";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, trip.egn);
+      preparedStatement.setString(1, egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -65,9 +65,8 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public Optional<Trip> find(String egn) {
+  public Optional<Trip> find(String egn) throws SQLException {
     Connection connection = provider.get();
-    Optional result=Optional.empty();
     String query = "SELECT * FROM TRIP WHERE EGN ="+egn;
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       ResultSet resultSet = preparedStatement.executeQuery(query);
@@ -76,7 +75,7 @@ public class PersistentTripRepository implements TripRepository {
         Date arrival = resultSet.getDate(2);
         Date departure = resultSet.getDate(3);
         String city = resultSet.getString(4);
-        result = Optional.of(new Trip(EGN, arrival, departure, city));
+        return Optional.of(new Trip(EGN, arrival, departure, city));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -87,11 +86,11 @@ public class PersistentTripRepository implements TripRepository {
         e.printStackTrace();
       }
     }
-    return result;
+    return Optional.empty();
   }
 
   @Override
-  public List<City> mostVisited() {
+  public List<City> mostVisited() throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT CITY, COUNT(*) FROM TRIP GROUP BY CITY ORDER BY CITY ASC";
     List<City> result = new LinkedList<>();
@@ -117,7 +116,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public List<Trip> display() {
+  public List<Trip> display() throws SQLException {
     Connection connection = provider.get();
     String query = "SELECT * FROM TRIP";
     List<Trip> result = new LinkedList<>();
