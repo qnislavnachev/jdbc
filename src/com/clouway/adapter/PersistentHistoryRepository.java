@@ -24,8 +24,6 @@ public class PersistentHistoryRepository implements HistoryRepository {
     this.pageSize = pageSize;
   }
 
-  private Integer tempPagesize = pageSize;
-
   @Override
   public List<Stock> fullHistory() {
     Connection connection = provider.get();
@@ -61,8 +59,6 @@ public class PersistentHistoryRepository implements HistoryRepository {
       preparedStatement.setInt(1, limit);
       preparedStatement.setInt(2, pageSize);
       ResultSet resultSet = preparedStatement.executeQuery();
-      tempPagesize = pageSize;
-
       while (resultSet.next()) {
         String name = resultSet.getString(1);
         Double price = resultSet.getDouble(2);
@@ -79,25 +75,5 @@ public class PersistentHistoryRepository implements HistoryRepository {
       }
     }
     return result;
-  }
-
-  private Integer getTotalPages() {
-    Connection connection = provider.get();
-    String query = "SELECT COUNT(*) FROM STOCK_HISTORY";
-    Integer result = 0;
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet resultSet = preparedStatement.executeQuery();
-      resultSet.next();
-      result = resultSet.getInt(1);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return result / pageSize;
   }
 }
