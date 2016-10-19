@@ -2,10 +2,8 @@ import com.clouway.adapter.ConnectionProvider;
 import com.clouway.adapter.PersistentHistoryRepository;
 import com.clouway.adapter.PersistentStockRepository;
 import com.clouway.core.Stock;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
