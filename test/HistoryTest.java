@@ -1,5 +1,5 @@
 import com.clouway.adapter.ConnectionProvider;
-import com.clouway.adapter.PersistentHistoryRepository;
+import com.clouway.adapter.PersistentStockHistoryRepository;
 import com.clouway.adapter.PersistentStockRepository;
 import com.clouway.core.Stock;
 import org.junit.Before;
@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class HistoryTest {
   private ConnectionProvider connectionProvider = new ConnectionProvider("TASK3");
   private PersistentStockRepository stockRepository = new PersistentStockRepository(connectionProvider);
-  private PersistentHistoryRepository historyRepository = new PersistentHistoryRepository(connectionProvider, 2);
+  private PersistentStockHistoryRepository historyRepository = new PersistentStockHistoryRepository(connectionProvider, 2);
 
   @Before
   public void fillingUp() {
@@ -59,7 +59,7 @@ public class HistoryTest {
 
   @Test
   public void displayFullHistory() throws Exception {
-    List<Stock> actual = historyRepository.fullHistory();
+    List<Stock> actual = historyRepository.getAll();
     List<Stock> expected = new LinkedList<>();
 
     expected.add(new Stock("apple", 1.2, 3.5));

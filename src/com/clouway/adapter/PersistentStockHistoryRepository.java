@@ -1,9 +1,8 @@
 package com.clouway.adapter;
 
-import com.clouway.core.HistoryRepository;
+import com.clouway.core.StockHistoryRepository;
 import com.clouway.core.Provider;
 import com.clouway.core.Stock;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,17 +14,17 @@ import java.util.List;
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
-public class PersistentHistoryRepository implements HistoryRepository {
+public class PersistentStockHistoryRepository implements StockHistoryRepository {
   private Provider<Connection> provider;
   private Integer pageSize;
 
-  public PersistentHistoryRepository(Provider<Connection> provider, Integer pageSize) {
+  public PersistentStockHistoryRepository(Provider<Connection> provider, Integer pageSize) {
     this.provider = provider;
     this.pageSize = pageSize;
   }
 
   @Override
-  public List<Stock> fullHistory() {
+  public List<Stock> getAll() {
     Connection connection = provider.get();
     String query = "SELECT * FROM STOCK_HISTORY";
     List<Stock> result = new LinkedList<>();
