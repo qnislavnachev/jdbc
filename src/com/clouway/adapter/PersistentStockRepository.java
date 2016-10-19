@@ -56,5 +56,30 @@ public class PersistentStockRepository implements StockRepository {
       }
     }
   }
+
+  public void fillUp(Integer amount) {
+    Connection connection = provider.get();
+    String query = "INSERT INTO STOCK VALUES(?,?,?)";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      for (Integer i=0;i<amount;i++){
+        String name="Legion";
+        Double price=i.doubleValue();
+        Double quantity=66.6;
+        preparedStatement.setString(1,name);
+        preparedStatement.setDouble(2,price);
+        preparedStatement.setDouble(3,quantity);
+        preparedStatement.execute();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    finally {
+      try {
+        connection.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 }
 
