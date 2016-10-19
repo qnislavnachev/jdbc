@@ -24,53 +24,80 @@ public class PersistentHistoryRepository implements HistoryRepository {
     this.pageSize = pageSize;
   }
 
+  private Integer tempPagesize = pageSize;
+
   @Override
   public List<Stock> fullHistory() {
-
-    return null;
-  }
-
-  @Override
-  public List<Stock> viewPage(Integer page) {
-    Connection connection=provider.get();
-    String query="SELECT * FROM STOCK_HISTORY LIMIT ?,?";
-    List<Stock> result=new LinkedList<>();
-    try(PreparedStatement preparedStatement=connection.prepareStatement(query)) {
-      Integer limit=(page*pageSize)-1;
-      preparedStatement.setInt(1,limit);
-      preparedStatement.setInt(2,pageSize);
-      ResultSet resultSet=preparedStatement.executeQuery();
-
-      while (resultSet.next()){
-        String name=resultSet.getString(1);
-        Double price=resultSet.getDouble(2);
-        Double quantity=resultSet.getDouble(3);
-        result.add(new Stock(name,price,quantity));
+    Connection connection = provider.get();
+    String query = "SELECT * FROM STOCK_HISTORY";
+    List<Stock> result = new LinkedList<>();
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        String name = resultSet.getString(1);
+        Double price = resultSet.getDouble(2);
+        Double quantity = resultSet.getDouble(3);
+        result.add(new Stock(name, price, quantity));
       }
     } catch (SQLException e) {
       e.printStackTrace();
-    }
-    return result;
-  }
-
-  private Integer getTotalPages(){
-    Connection connection=provider.get();
-    String query="SELECT COUNT(*) FROM STOCK_HISTORY";
-    Integer result=0;
-    try(PreparedStatement preparedStatement=connection.prepareStatement(query)){
-      ResultSet resultSet=preparedStatement.executeQuery();
-      resultSet.next();
-      result=resultSet.getInt(1);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    finally {
+    } finally {
       try {
         connection.close();
       } catch (SQLException e) {
         e.printStackTrace();
       }
     }
-    return result/pageSize;
+    return result;
+  }
+
+  @Override
+  public List<Stock> viewPage(Integer page) {
+    Connection connection = provider.get();
+    Integer limit = (page * pageSize) -2;
+    String query = "SELECT * FROM STOCK_HISTORY LIMIT ? , ?";
+    List<Stock> result = new LinkedList<>();
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      preparedStatement.setInt(1, limit);
+      preparedStatement.setInt(2, pageSize);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      tempPagesize = pageSize;
+
+      while (resultSet.next()) {
+        String name = resultSet.getString(1);
+        Double price = resultSet.getDouble(2);
+        Double quantity = resultSet.getDouble(3);
+        result.add(new Stock(name, price, quantity));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        connection.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return result;
+  }
+
+  private Integer getTotalPages() {
+    Connection connection = provider.get();
+    String query = "SELECT COUNT(*) FROM STOCK_HISTORY";
+    Integer result = 0;
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      ResultSet resultSet = preparedStatement.executeQuery();
+      resultSet.next();
+      result = resultSet.getInt(1);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        connection.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return result / pageSize;
   }
 }
