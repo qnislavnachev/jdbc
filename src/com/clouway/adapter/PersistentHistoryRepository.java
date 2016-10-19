@@ -3,7 +3,6 @@ package com.clouway.adapter;
 import com.clouway.core.HistoryRepository;
 import com.clouway.core.Provider;
 import com.clouway.core.Stock;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,6 +22,7 @@ public class PersistentHistoryRepository implements HistoryRepository {
     this.provider = provider;
     this.pageSize = pageSize;
   }
+  private Integer tempPagesize=pageSize;
 
   @Override
   public List<Stock> fullHistory() {
@@ -37,10 +37,13 @@ public class PersistentHistoryRepository implements HistoryRepository {
     List<Stock> result=new LinkedList<>();
     try(PreparedStatement preparedStatement=connection.prepareStatement(query)) {
       Integer limit=(page*pageSize)-1;
+      if((limit-1)+pageSize>getTotalPages()){
+        tempPagesize=getTotalPages()-((limit-1)+pageSize);
+      }
       preparedStatement.setInt(1,limit);
       preparedStatement.setInt(2,pageSize);
       ResultSet resultSet=preparedStatement.executeQuery();
-
+      tempPagesize=pageSize;
       while (resultSet.next()){
         String name=resultSet.getString(1);
         Double price=resultSet.getDouble(2);
