@@ -13,7 +13,7 @@ public interface PersonRepository {
 
   Optional<Person> find(String egn);
 
-  List<Person> findAll(String letter);
+  List<Person> findAllStartingWith(String letter);
 
   List<Person> display();
 }

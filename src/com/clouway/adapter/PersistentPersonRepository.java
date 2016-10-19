@@ -90,7 +90,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public List<Person> findAll(String letter) {
+  public List<Person> findAllStartingWith(String letter) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE ?";
     List<Person> result = new LinkedList<>();

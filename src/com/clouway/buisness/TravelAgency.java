@@ -4,13 +4,9 @@ import com.clouway.adapter.PersistentPersonRepository;
 import com.clouway.adapter.PersistentTripRepository;
 import com.clouway.core.City;
 import com.clouway.core.Person;
-import com.clouway.core.Provider;
 import com.clouway.core.Trip;
 
-import java.sql.Connection;
 import java.util.List;
-import java.util.Optional;
-import java.util.zip.CheckedInputStream;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -37,7 +33,7 @@ public class TravelAgency {
   }
 
   public List<Person> findClientsStartingWithLetter(String letter) {
-    return personRepository.findAll(letter);
+    return personRepository.findAllStartingWith(letter);
   }
 
   public void registerTrip(Trip trip) {
@@ -61,7 +57,7 @@ public class TravelAgency {
   }
 
   public List<Person> peopleStartingWith(String letter) {
-    return personRepository.findAll(letter);
+    return personRepository.findAllStartingWith(letter);
   }
 
 
