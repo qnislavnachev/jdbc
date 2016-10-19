@@ -56,6 +56,5 @@ public class PersistentStockRepository implements StockRepository {
       }
     }
   }
-
 }
 
