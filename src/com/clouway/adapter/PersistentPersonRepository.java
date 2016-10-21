@@ -25,7 +25,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void register(Person person) throws SQLException {
+  public void register(Person person) {
     Connection connection = provider.get();
     String query = "INSERT INTO PEOPLE (NAME,EGN,AGE,EMAIL) VALUES (?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -46,11 +46,11 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void delete(String egn) throws SQLException {
+  public void delete(String egn) {
     Connection connection = provider.get();
     String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1,egn);
+      preparedStatement.setString(1, egn);
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -64,7 +64,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public Optional<Person> find(String EGN) throws SQLException {
+  public Optional<Person> find(String EGN) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN=(?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -89,7 +89,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public List<Person> findAllStartingWith(String letter) throws SQLException {
+  public List<Person> findAllStartingWith(String letter) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE NAME LIKE '(?)%%%'";
     List<Person> result = new LinkedList<>();
@@ -116,7 +116,7 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void updateAge(String egn, Integer newAge) throws SQLException {
+  public void updateAge(String egn, Integer newAge) {
     Connection connection = provider.get();
     String query = "UPDATE PEOPLE SET AGE = (?) WHERE EGN= (?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
