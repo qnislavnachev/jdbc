@@ -73,7 +73,7 @@ public class HistoryTest {
 
   @Test
   public void displayInPages() throws Exception {
-    List<Stock> actual = historyRepository.viewPage(2);
+    List<Stock> actual = historyRepository.getPages(2);
     List<Stock> expected = new LinkedList<>();
 
     expected.add(new Stock("orange", 3.1, 5.1));
@@ -84,7 +84,7 @@ public class HistoryTest {
 
   @Test
   public void displayLastPageWithoutHavingenoughtStockToFillIt() throws Exception {
-    List<Stock> actual = historyRepository.viewPage(3);
+    List<Stock> actual = historyRepository.getPages(3);
     List<Stock> expected = new LinkedList<>();
 
     expected.add(new Stock("tomato", 2.1, 4.1));

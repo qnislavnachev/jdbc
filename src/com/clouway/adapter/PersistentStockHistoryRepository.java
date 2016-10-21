@@ -24,7 +24,7 @@ public class PersistentStockHistoryRepository implements StockHistoryRepository 
   }
 
   @Override
-  public List<Stock> getAll() {
+  public List<Stock> getAll(){
     Connection connection = provider.get();
     String query = "SELECT * FROM STOCK_HISTORY";
     List<Stock> result = new LinkedList<>();
@@ -49,14 +49,13 @@ public class PersistentStockHistoryRepository implements StockHistoryRepository 
   }
 
   @Override
-  public List<Stock> viewPage(Integer page) {
+  public List<Stock> getPages(Integer limit,Integer offset) {
     Connection connection = provider.get();
-    Integer limit = (page * pageSize) -2;
     String query = "SELECT * FROM STOCK_HISTORY LIMIT ? , ?";
     List<Stock> result = new LinkedList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setInt(1, limit);
-      preparedStatement.setInt(2, pageSize);
+      preparedStatement.setInt(2, offset);
       ResultSet resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
         String name = resultSet.getString(1);
