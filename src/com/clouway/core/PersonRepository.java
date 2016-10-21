@@ -8,14 +8,14 @@ import java.util.Optional;
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
 public interface PersonRepository {
-  void register(Person person) throws SQLException;
+  void register(Person person);
 
-  void delete(String egn) throws SQLException;
+  void delete(String egn);
 
-  Optional<Person> find(String egn) throws SQLException;
+  Optional<Person> find(String egn);
 
-  List<Person> findAllStartingWith(String letter) throws SQLException;
+  List<Person> findAllStartingWith(String letter);
 
-  void updateAge(String egn, Integer newAge) throws SQLException;
+  void updateAge(String egn, Integer newAge);
 
 }
