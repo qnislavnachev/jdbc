@@ -18,7 +18,7 @@ public class PersistentUserRepository implements UserRepository {
 
   @Override
   public void register(User user) {
-    String query = "INSERT INT USER (?,?,?)";
+    String query = "INSERT INTO USER VALUES (?,?,?)";
     dataStore.update(query, user.name, user.age, user.userStatus);
   }
 

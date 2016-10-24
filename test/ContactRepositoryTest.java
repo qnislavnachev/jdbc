@@ -1,12 +1,10 @@
 import com.clouway.adapter.ConnectionProvider;
-import com.clouway.adapter.PersistentUserRepository;
-import com.clouway.core.User;
-import com.clouway.core.UserRepository;
+import com.clouway.adapter.PersistentContactRepository;
+import com.clouway.core.Contact;
 import com.clouway.datastore.DataStore;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.jws.soap.SOAPBinding.Use;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,32 +17,31 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
-public class UserRepositoryTest {
-  private ConnectionProvider connectionProvider = new ConnectionProvider("TASK5");
-  private DataStore dataStore = new DataStore(connectionProvider);
-  private PersistentUserRepository userRepository = new PersistentUserRepository(dataStore);
+public class ContactRepositoryTest {
+  private ConnectionProvider connectionProvider=new ConnectionProvider("TASK5");
+  private DataStore dataStore=new DataStore(connectionProvider);
+  private PersistentContactRepository contactRepository=new PersistentContactRepository(dataStore);
 
   @Before
-  public void setup() {
-    delete();
-    User user = new User("Vasil", 21, "admin");
-    User user1 = new User("Martin", 22, "super user");
-    userRepository.register(user);
-    userRepository.register(user1);
+  public void setup(){
+    Contact contact=new Contact("Vasil","0887095662","alroy@abv.bg");
+    Contact contact1=new Contact("Martin","0882345622","marto@abv.bg");
+    contactRepository.register(contact);
+    contactRepository.register(contact1);
   }
 
   @Test
   public void happyPath() throws Exception {
-    List<User> expected=new LinkedList<>();
-    expected.add(new User("Martin", 22, "super user"));
-    expected.add(new User("Vasil", 21, "admin"));
-    List<User> actual=userRepository.getAll();
+    List<Contact> actual=new LinkedList<>();
+    actual.add(new Contact("Martin","0882345622","marto@abv.bg"));
+    actual.add(new Contact("Vasil","0887095662","alroy@abv.bg"));
+    List<Contact> expected=contactRepository.getAll();
     assertThat(actual,is(expected));
 
   }
 
   private void delete() {
-    String query = "DELETE FROM USER";
+    String query = "DELETE FROM CONTACT";
     Connection connection = connectionProvider.get();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.execute();

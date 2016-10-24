@@ -19,13 +19,13 @@ public class PersistentContactRepository implements ContactRepository {
 
   @Override
   public void register(Contact contact) {
-    String query="INSERT INTO CONTACT (?,?,?)";
+    String query="INSERT INTO CONTACT VALUES (?,?,?)";
     dataStore.update(query,contact.name,contact.phone,contact.email);
   }
 
   @Override
   public List<Contact> getAll() {
     String query="SELECT * FROM CONTACT";
-    return dataStore.fetchRows(query,resultSet -> new Contact(resultSet.getString(1),resultSet.getInt(2),resultSet.getString(3)));
+    return dataStore.fetchRows(query,resultSet -> new Contact(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3)));
   }
 }

@@ -1,12 +1,10 @@
 import com.clouway.adapter.ConnectionProvider;
-import com.clouway.adapter.PersistentUserRepository;
-import com.clouway.core.User;
-import com.clouway.core.UserRepository;
+import com.clouway.adapter.PersistenAddressRepository;
+import com.clouway.core.Address;
 import com.clouway.datastore.DataStore;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.jws.soap.SOAPBinding.Use;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,35 +14,36 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
-public class UserRepositoryTest {
+public class AddressRepositoryTest {
   private ConnectionProvider connectionProvider = new ConnectionProvider("TASK5");
   private DataStore dataStore = new DataStore(connectionProvider);
-  private PersistentUserRepository userRepository = new PersistentUserRepository(dataStore);
+  private PersistenAddressRepository addressRepository= new PersistenAddressRepository(dataStore);
 
   @Before
   public void setup() {
     delete();
-    User user = new User("Vasil", 21, "admin");
-    User user1 = new User("Martin", 22, "super user");
-    userRepository.register(user);
-    userRepository.register(user1);
+    Address address = new Address("Vasil","Pleven","Storgozia","Storgozia",51,"D");
+    Address address2 = new Address("Martin","Tarnovo","bul Bulgaria","Triagalnik",23,"A");
+    addressRepository.register(address);
+    addressRepository.register(address2);
   }
 
   @Test
   public void happyPath() throws Exception {
-    List<User> expected=new LinkedList<>();
-    expected.add(new User("Martin", 22, "super user"));
-    expected.add(new User("Vasil", 21, "admin"));
-    List<User> actual=userRepository.getAll();
+    List<Address> expected=new LinkedList<>();
+    expected.add(new Address("Martin","Tarnovo","bul Bulgaria","Triagalnik",23,"A"));
+    expected.add( new Address("Vasil","Pleven","Storgozia","Storgozia",51,"D"));
+    List<Address> actual=addressRepository.getAll();
     assertThat(actual,is(expected));
 
   }
 
   private void delete() {
-    String query = "DELETE FROM USER";
+    String query = "DELETE FROM ADDRESS";
     Connection connection = connectionProvider.get();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.execute();

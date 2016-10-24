@@ -5,10 +5,10 @@ package com.clouway.core;
  */
 public class Contact {
   public final String name;
-  public final Integer phone;
+  public final String phone;
   public final String email;
 
-  public Contact(String name, Integer phone, String email) {
+  public Contact(String name, String phone, String email) {
     this.name = name;
     this.phone = phone;
     this.email = email;
@@ -18,7 +18,7 @@ public class Contact {
   public String toString() {
     return "Contact{" +
             "name='" + name + '\'' +
-            ", phone=" + phone +
+            ", phone='" + phone + '\'' +
             ", email='" + email + '\'' +
             '}';
   }

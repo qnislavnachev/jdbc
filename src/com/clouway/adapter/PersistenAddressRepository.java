@@ -20,7 +20,7 @@ public class PersistenAddressRepository implements AddressRepository {
 
   @Override
   public void register(Address address) {
-    String query="INSERT INTO ADDRESS (?,?,?)";
+    String query="INSERT INTO ADDRESS VALUES (?,?,?,?,?,?)";
     dataStore.update(query,address.name,address.city,address.street,address.residentialDistrict,address.blockOfFlats,address.entrance);
   }
 

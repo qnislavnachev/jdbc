@@ -18,12 +18,26 @@ public class ConnectionProvider implements Provider<Connection> {
 
   @Override
   public Connection get() {
+    Connection connection = null;
     try {
       Class.forName("com.mysql.jdbc.Driver").newInstance();
-      return DriverManager.getConnection("jdbc:mysql://localhost/" + database + "?user=root&password=clouway.com");
-    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+      connection = DriverManager.getConnection("jdbc:mysql://localhost/" + database + "?user=root&password=clouway.com");
+    } catch (IllegalAccessException e) {
       e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      throw new IllegalStateException("The MySQL JDBC driver wasn't configured");
     }
-    return null;
+    if (connection == null) {
+      try {
+        throw new SQLException("There was a problem with your connection.");
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return connection;
   }
 }
