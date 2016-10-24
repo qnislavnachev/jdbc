@@ -69,6 +69,7 @@ public class PersistentStockRepository implements StockRepository {
         preparedStatement.setDouble(2,price);
         preparedStatement.setDouble(3,quantity);
         preparedStatement.execute();
+        System.out.println("Inserted "+i);
       }
     } catch (SQLException e) {
       e.printStackTrace();
