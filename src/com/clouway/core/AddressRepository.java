@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
-public interface HistoryRepository {
-  List<Stock> fullHistory();
+public interface AddressRepository {
+  void register(Address address);
 
-  List<Stock> viewPage(Integer page);
+  List<Address> getAll();
 }
