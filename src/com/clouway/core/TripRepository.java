@@ -16,5 +16,4 @@ public interface TripRepository {
 
   List<City> mostVisited();
 
-  List<Trip> display();
 }

@@ -1,5 +1,6 @@
 package com.clouway.core;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,5 +16,6 @@ public interface PersonRepository {
 
   List<Person> findAllStartingWith(String letter);
 
-  List<Person> display();
+  List<Person> findAllStayingAtTheSameTime(String city, Date date);
+
 }

@@ -114,30 +114,4 @@ public class PersistentTripRepository implements TripRepository {
     }
     return null;
   }
-
-  @Override
-  public List<Trip> display() {
-    Connection connection = provider.get();
-    String query = "SELECT * FROM TRIP";
-    List<Trip> result = new LinkedList<>();
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      ResultSet rs = preparedStatement.executeQuery();
-      while (rs.next()) {
-        String egn = rs.getString(1);
-        Date arrival = rs.getDate(2);
-        Date departure = rs.getDate(3);
-        String city = rs.getString(4);
-        result.add(new Trip(egn, arrival, departure, city));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return result;
-  }
 }
