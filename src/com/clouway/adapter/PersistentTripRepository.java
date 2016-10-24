@@ -25,7 +25,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public void register(Trip trip) throws SQLException {
+  public void register(Trip trip) {
     Connection connection = provider.get();
     String query = "INSERT INTO TRIP VALUES(?,?,?,?)";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -47,7 +47,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public void delete(String egn) throws SQLException {
+  public void delete(String egn) {
     Connection connection = provider.get();
     String query = "DELETE FROM TRIP WHERE EGN= ?";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public Optional<Trip> find(String egn) throws SQLException {
+  public Optional<Trip> find(String egn) {
     Connection connection = provider.get();
     String query = "SELECT * FROM TRIP WHERE EGN ="+egn;
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -90,7 +90,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public List<City> mostVisited() throws SQLException {
+  public List<City> mostVisited()  {
     Connection connection = provider.get();
     String query = "SELECT CITY, COUNT(*) FROM TRIP GROUP BY CITY ORDER BY CITY ASC";
     List<City> result = new LinkedList<>();
@@ -116,7 +116,7 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public List<Trip> display() throws SQLException {
+  public List<Trip> display() {
     Connection connection = provider.get();
     String query = "SELECT * FROM TRIP";
     List<Trip> result = new LinkedList<>();

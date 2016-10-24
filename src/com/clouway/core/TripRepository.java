@@ -8,13 +8,13 @@ import java.util.Optional;
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
 public interface TripRepository {
-  void register(Trip trip) throws SQLException;
+  void register(Trip trip);
 
-  void delete(String egn) throws SQLException;
+  void delete(String egn);
 
-  Optional<Trip> find(String egn) throws SQLException;
+  Optional<Trip> find(String egn);
 
-  List<City> mostVisited() throws SQLException;
+  List<City> mostVisited();
 
-  List<Trip> display() throws SQLException;
+  List<Trip> display();
 }
