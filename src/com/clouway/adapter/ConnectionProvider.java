@@ -17,7 +17,7 @@ public class ConnectionProvider implements Provider<Connection> {
   }
 
   @Override
-  public Connection get()  {
+  public Connection get() {
     Connection connection = null;
     try {
       Class.forName("com.mysql.jdbc.Driver").newInstance();

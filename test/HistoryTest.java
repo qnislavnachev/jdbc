@@ -30,31 +30,18 @@ public class HistoryTest {
     Stock pear = new Stock("pear", 2.2, 4.6);
     Stock orange = new Stock("orange", 3.1, 5.1);
     Stock potato = new Stock("potato", 2.3, 6.5);
-    Stock tomato = new Stock("tomato", 2.1, 4.1);
-    Stock watermelon = new Stock("watermelon", 1.5, 3.9);
-    Stock cherry = new Stock("cherry", 0.9, 13.1);
-    Stock toothbrush = new Stock("toothbrush", 1.2, 20.0);
-    Stock toothpaste = new Stock("toothpaste", 2.8, 7.0);
-    Stock headphones = new Stock("headphones", 30.5, 10.0);
-    Stock tabaco = new Stock("tabaco", 10.9, 30.0);
+
 
     stockRepository.register(apple);
     stockRepository.register(pear);
     stockRepository.register(orange);
     stockRepository.register(potato);
-    stockRepository.register(tomato);
-    stockRepository.register(watermelon);
-    stockRepository.register(cherry);
-    stockRepository.register(toothbrush);
-    stockRepository.register(toothpaste);
-    stockRepository.register(headphones);
-    stockRepository.register(tabaco);
+
 
     stockRepository.updateQuantity("apple", 1.1);
     stockRepository.updateQuantity("pear", 1.2);
     stockRepository.updateQuantity("orange", 4.2);
     stockRepository.updateQuantity("potato", 6.7);
-    stockRepository.updateQuantity("tomato", 3.5);
   }
 
   @Test
@@ -66,14 +53,14 @@ public class HistoryTest {
     expected.add(new Stock("pear", 2.2, 4.6));
     expected.add(new Stock("orange", 3.1, 5.1));
     expected.add(new Stock("potato", 2.3, 6.5));
-    expected.add(new Stock("tomato", 2.1, 4.1));
+
 
     assertThat(actual, is(expected));
   }
 
   @Test
   public void displayInPages() throws Exception {
-    List<Stock> actual = historyRepository.getPages(2);
+    List<Stock> actual = historyRepository.getPages(2,2);
     List<Stock> expected = new LinkedList<>();
 
     expected.add(new Stock("orange", 3.1, 5.1));
@@ -84,10 +71,10 @@ public class HistoryTest {
 
   @Test
   public void displayLastPageWithoutHavingenoughtStockToFillIt() throws Exception {
-    List<Stock> actual = historyRepository.getPages(3);
+    List<Stock> actual = historyRepository.getPages(3,1);
     List<Stock> expected = new LinkedList<>();
 
-    expected.add(new Stock("tomato", 2.1, 4.1));
+    expected.add(new Stock("potato", 2.3, 6.5));
 
     assertThat(actual, is(expected));
   }
