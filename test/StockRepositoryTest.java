@@ -7,6 +7,10 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -18,15 +22,30 @@ public class StockRepositoryTest {
   @Before
   public void setup() {
     deleteTable("STOCK");
-    Stock apple = new Stock("apple", 1.2, 3.5);
-    Stock pear = new Stock("pear", 2.2, 4.6);
-    stockRepository.register(apple);
-    stockRepository.register(pear);
   }
 
   @Test
   public void happyPath() throws Exception {
+    Stock apple = new Stock("apple", 1.2, 3.5);
+    Stock pear = new Stock("pear", 2.2, 4.6);
+    stockRepository.register(apple);
+    stockRepository.register(pear);
 
+    Stock expected = new Stock("apple", 1.2, 3.5);
+    Optional<Stock> actual = stockRepository.find("apple");
+
+    assertThat(actual.get(), is(expected));
+  }
+
+  @Test
+  public void updatingQuantity() throws Exception {
+    Stock apple = new Stock("apple", 1.2, 3.5);
+    stockRepository.register(apple);
+    Stock expected=new Stock("apple",1.2,4.5);
+    stockRepository.updateQuantity("apple",4.5);
+    Optional<Stock> actual=stockRepository.find("apple");
+
+    assertThat(actual.get(),is(expected));
 
   }
 

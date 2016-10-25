@@ -43,7 +43,7 @@ public class PersistentStockRepository implements StockRepository {
   @Override
   public Optional<Stock> find(String name) {
     Connection connection = provider.get();
-    String query = "SELECT * FROM STOCH WHERE NAME=?";
+    String query = "SELECT * FROM STOCK WHERE NAME=?";
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, name);
       ResultSet resultSet = preparedStatement.executeQuery();
