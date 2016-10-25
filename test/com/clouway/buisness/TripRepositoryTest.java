@@ -49,7 +49,6 @@ public class TripRepositoryTest {
   public void registerTrip() throws Exception {
     Trip expected = new Trip("1111111111", calendar.getDate(10, 12, 2016), calendar.getDate(12, 12, 2016), "Pleven");
     Optional<Trip> actual = tripRepository.find("1111111111");
-
     assertThat(actual.get(), is(expected));
   }
 

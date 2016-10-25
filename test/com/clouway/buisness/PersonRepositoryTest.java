@@ -40,11 +40,20 @@ public class PersonRepositoryTest {
 
 
   @Test
-  public void registerPerson() throws Exception {
+  public void happyPath() throws Exception {
     Person expected=new Person("Vasko", "1111111111", 25, "pojoemail@object.com");
     Optional<Person> actual=personRepository.find("1111111111");
     assertThat(actual.get(),is(expected));
   }
+
+  @Test
+  public void notFindingAPerson() throws Exception {
+    Optional<Person> expected=Optional.empty();
+    Optional<Person> actual=personRepository.find("2111111111");
+    assertThat(actual,is(expected));
+  }
+
+
 
   @Test
   public void findAllStartingWithSequens() throws Exception {

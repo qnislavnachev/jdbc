@@ -46,24 +46,6 @@ public class PersistentPersonRepository implements PersonRepository {
   }
 
   @Override
-  public void delete(String egn) {
-    Connection connection = provider.get();
-    String query = "DELETE FROM PEOPLE WHERE EGN=(?)";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, egn);
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-  @Override
   public Optional<Person> find(String EGN) {
     Connection connection = provider.get();
     String query = "SELECT * FROM PEOPLE WHERE EGN=" + EGN;

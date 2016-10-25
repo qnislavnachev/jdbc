@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface PersonRepository {
   void register(Person person);
 
-  void delete(String egn);
-
   Optional<Person> find(String egn);
 
   List<Person> findAllStartingWith(String letter);
