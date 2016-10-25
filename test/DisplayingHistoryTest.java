@@ -17,10 +17,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
-public class HistoryTest {
+public class DisplayingHistoryTest {
   private ConnectionProvider connectionProvider = new ConnectionProvider("TASK3");
   private PersistentStockRepository stockRepository = new PersistentStockRepository(connectionProvider);
-  private PersistentStockHistoryRepository historyRepository = new PersistentStockHistoryRepository(connectionProvider, 2);
+  private PersistentStockHistoryRepository historyRepository = new PersistentStockHistoryRepository(connectionProvider);
 
   @Before
   public void fillingUp() {

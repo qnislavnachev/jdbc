@@ -16,15 +16,13 @@ import java.util.List;
  */
 public class PersistentStockHistoryRepository implements StockHistoryRepository {
   private Provider<Connection> provider;
-  private Integer pageSize;
 
-  public PersistentStockHistoryRepository(Provider<Connection> provider, Integer pageSize) {
+  public PersistentStockHistoryRepository(Provider<Connection> provider) {
     this.provider = provider;
-    this.pageSize = pageSize;
   }
 
   @Override
-  public List<Stock> getAll(){
+  public List<Stock> getAll() {
     Connection connection = provider.get();
     String query = "SELECT * FROM STOCK_HISTORY";
     List<Stock> result = new LinkedList<>();
@@ -49,7 +47,7 @@ public class PersistentStockHistoryRepository implements StockHistoryRepository 
   }
 
   @Override
-  public List<Stock> getPages(Integer limit,Integer offset) {
+  public List<Stock> getPages(Integer limit, Integer offset) {
     Connection connection = provider.get();
     String query = "SELECT * FROM STOCK_HISTORY LIMIT ? , ?";
     List<Stock> result = new LinkedList<>();
