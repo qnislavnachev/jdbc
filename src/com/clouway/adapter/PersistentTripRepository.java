@@ -47,24 +47,6 @@ public class PersistentTripRepository implements TripRepository {
   }
 
   @Override
-  public void delete(String egn) {
-    Connection connection = provider.get();
-    String query = "DELETE FROM TRIP WHERE EGN= ?";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      preparedStatement.setString(1, egn);
-      preparedStatement.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-  @Override
   public Optional<Trip> find(String egn) {
     Connection connection = provider.get();
     String query = "SELECT * FROM TRIP WHERE EGN ="+egn;

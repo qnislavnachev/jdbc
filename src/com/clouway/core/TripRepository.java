@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface TripRepository {
   void register(Trip trip);
 
-  void delete(String egn);
-
   Optional<Trip> find(String egn);
 
   List<City> mostVisited();
