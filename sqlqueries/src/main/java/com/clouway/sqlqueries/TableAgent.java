@@ -27,7 +27,7 @@ public class TableAgent {
             String userName = resultSet.getString(2);
             String password = resultSet.getString(3);
             String email = resultSet.getString(4);
-            stringBuilder.append("\nID: ").append(id).append("\nUserName:").append(userName).append("\nPassword: ").append(password).append("\nEmail: ").append(email).append("\n");
+            stringBuilder.append("\nID: ").append(id).append("\nUserName:"+ resultSet.getCursorName()).append(userName).append("\nPassword: ").append(password).append("\nEmail: ").append(email).append("\n");
         }
         return stringBuilder.toString();
     }
