@@ -94,6 +94,6 @@ public class PersistentTripRepository implements TripRepository {
         e.printStackTrace();
       }
     }
-    return null;
+    return result;
   }
 }
