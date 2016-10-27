@@ -1,6 +1,6 @@
-package com.clouway.adapter;
+package com.clouway.task1.adapter;
 
-import com.clouway.core.Provider;
+import com.clouway.task1.core.Provider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

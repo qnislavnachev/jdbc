@@ -1,14 +1,12 @@
-package com.clouway.adapter;
+package com.clouway.task1.adapter;
 
-import com.clouway.core.Person;
-import com.clouway.core.PersonRepository;
-import com.clouway.core.Provider;
-import com.clouway.core.TableManager;
+import com.clouway.task1.core.Person;
+import com.clouway.task1.core.PersonRepository;
+import com.clouway.task1.core.Provider;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
