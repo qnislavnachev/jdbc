@@ -1,8 +1,8 @@
-package com.clouway.adapter;
+package com.clouway.task5.adapter;
 
-import com.clouway.core.Contact;
-import com.clouway.core.ContactRepository;
-import com.clouway.datastore.DataStore;
+import com.clouway.task5.adapter.core.Contact;
+import com.clouway.task5.adapter.core.ContactRepository;
+import com.clouway.task5.adapter.datastore.DataStore;
 
 import java.util.List;
 

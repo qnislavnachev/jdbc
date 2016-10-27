@@ -1,4 +1,4 @@
-package com.clouway.datastore;
+package com.clouway.task5.adapter.datastore;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

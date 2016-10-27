@@ -1,8 +1,8 @@
-package com.clouway.adapter;
+package com.clouway.task5.adapter;
 
-import com.clouway.core.User;
-import com.clouway.core.UserRepository;
-import com.clouway.datastore.DataStore;
+import com.clouway.task5.adapter.core.User;
+import com.clouway.task5.adapter.core.UserRepository;
+import com.clouway.task5.adapter.datastore.DataStore;
 
 import java.util.List;
 

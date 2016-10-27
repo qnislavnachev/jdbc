@@ -1,6 +1,6 @@
-package com.clouway.datastore;
+package com.clouway.task5.adapter.datastore;
 
-import com.clouway.core.Provider;
+import com.clouway.task5.adapter.core.Provider;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
