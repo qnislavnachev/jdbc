@@ -1,7 +1,5 @@
-package com.clouway.core;
+package com.clouway.task2.core;
 
-
-import java.sql.SQLException;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>

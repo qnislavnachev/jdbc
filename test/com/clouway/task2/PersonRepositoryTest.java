@@ -1,10 +1,10 @@
-package com.clouway.buisness;
+package com.clouway.task2;
 
-import com.clouway.adapter.ConnectionProvider;
-import com.clouway.adapter.PersistentPersonRepository;
-import com.clouway.adapter.PersistentTripRepository;
-import com.clouway.core.Person;
-import com.clouway.core.Trip;
+import com.clouway.task2.adapter.ConnectionProvider;
+import com.clouway.task2.adapter.PersistentPersonRepository;
+import com.clouway.task2.adapter.PersistentTripRepository;
+import com.clouway.task2.core.Person;
+import com.clouway.task2.core.Trip;
 import org.junit.Before;
 import org.junit.Test;
 

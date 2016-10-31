@@ -1,9 +1,9 @@
-package com.clouway.adapter;
+package com.clouway.task2.adapter;
 
-import com.clouway.core.City;
-import com.clouway.core.Provider;
-import com.clouway.core.Trip;
-import com.clouway.core.TripRepository;
+import com.clouway.task2.core.City;
+import com.clouway.task2.core.Provider;
+import com.clouway.task2.core.Trip;
+import com.clouway.task2.core.TripRepository;
 
 import java.sql.Connection;
 import java.sql.Date;

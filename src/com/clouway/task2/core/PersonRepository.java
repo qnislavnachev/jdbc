@@ -1,4 +1,4 @@
-package com.clouway.core;
+package com.clouway.task2.core;
 
 import java.sql.Date;
 import java.util.List;

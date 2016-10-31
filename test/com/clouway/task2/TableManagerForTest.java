@@ -1,7 +1,6 @@
-package com.clouway.buisness;
+package com.clouway.task2;
 
-import com.clouway.adapter.ConnectionProvider;
-import com.clouway.core.Provider;
+import com.clouway.task2.core.Provider;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
