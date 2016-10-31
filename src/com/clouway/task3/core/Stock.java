@@ -1,4 +1,4 @@
-package com.clouway.core;
+package com.clouway.task3.core;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>

@@ -1,6 +1,8 @@
-import com.clouway.adapter.ConnectionProvider;
-import com.clouway.adapter.PersistentStockRepository;
-import com.clouway.core.Stock;
+package task3;
+
+import com.clouway.task3.adapter.ConnectionProvider;
+import com.clouway.task3.adapter.PersistentStockRepository;
+import com.clouway.task3.core.Stock;
 import org.junit.Before;
 import org.junit.Test;
 

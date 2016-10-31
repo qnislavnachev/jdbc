@@ -1,8 +1,8 @@
-package com.clouway.adapter;
+package com.clouway.task3.adapter;
 
-import com.clouway.core.StockHistoryRepository;
-import com.clouway.core.Provider;
-import com.clouway.core.Stock;
+import com.clouway.task3.core.StockHistoryRepository;
+import com.clouway.task3.core.Provider;
+import com.clouway.task3.core.Stock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
