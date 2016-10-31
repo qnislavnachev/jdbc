@@ -1,4 +1,4 @@
-package task5;
+package com.clouway.task5;
 
 import com.clouway.task5.adapter.ConnectionProvider;
 import com.clouway.task5.adapter.PersistentUserRepository;
