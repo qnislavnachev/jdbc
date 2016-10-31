@@ -1,4 +1,4 @@
-package com.clouway.task5.adapter.core;
+package com.clouway.task5.core;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>

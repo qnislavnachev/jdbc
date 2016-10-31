@@ -1,8 +1,8 @@
 package com.clouway.task5.adapter;
 
-import com.clouway.task5.adapter.core.Address;
-import com.clouway.task5.adapter.core.AddressRepository;
-import com.clouway.task5.adapter.datastore.DataStore;
+import com.clouway.task5.core.Address;
+import com.clouway.task5.core.AddressRepository;
+import com.clouway.task5.datastore.DataStore;
 
 import java.util.List;
 

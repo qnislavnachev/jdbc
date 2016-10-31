@@ -2,8 +2,8 @@ package task5;
 
 import com.clouway.task5.adapter.ConnectionProvider;
 import com.clouway.task5.adapter.PersistenAddressRepository;
-import com.clouway.task5.adapter.core.Address;
-import com.clouway.task5.adapter.datastore.DataStore;
+import com.clouway.task5.core.Address;
+import com.clouway.task5.datastore.DataStore;
 import org.junit.Before;
 import org.junit.Test;
 

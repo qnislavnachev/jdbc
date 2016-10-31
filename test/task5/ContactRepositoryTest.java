@@ -2,8 +2,8 @@ package task5;
 
 import com.clouway.task5.adapter.ConnectionProvider;
 import com.clouway.task5.adapter.PersistentContactRepository;
-import com.clouway.task5.adapter.core.Contact;
-import com.clouway.task5.adapter.datastore.DataStore;
+import com.clouway.task5.core.Contact;
+import com.clouway.task5.datastore.DataStore;
 import org.junit.Before;
 import org.junit.Test;
 
