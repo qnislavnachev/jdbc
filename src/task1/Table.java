@@ -2,13 +2,13 @@ package task1;
 
 import java.sql.*;
 
-public class Queries {
+public class Table {
     private Statement statement;
     private Connection connection ;
     private String table;
 
 
-    public Queries(Connection connection, String table) throws SQLException {
+    public Table(Connection connection, String table) throws SQLException {
         this.table = table;
         this.connection = connection;
         statement = connection.createStatement();
@@ -48,8 +48,8 @@ public class Queries {
         statement.executeUpdate(query);
     }
 
-    public void addColumn(String columnName, String dataType) throws SQLException {
-        String query = "alter table " + table + " add " + columnName + " " + dataType;
+    public void addColumn(String columnName, String dataType, String value) throws SQLException {
+        String query = "alter table " + table + " add " + columnName + " " + dataType + " " + value;
         statement.executeUpdate(query);
     }
 
