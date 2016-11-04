@@ -1,0 +1,6 @@
+#MyIgnore
+.idea/workspace.xml
+.idea/
+out/
+*.xml
+*.iml
