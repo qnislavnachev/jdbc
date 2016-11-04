@@ -3,7 +3,7 @@ package queriestest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import task1.Queries;
+import task1.Table;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -19,19 +19,19 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class TestQueries {
-    private Queries queries;
+    private Table table;
     private Connection connection;
 
     @Before
     public void setUp() throws Exception {
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "iani");
-        queries = new Queries(connection, "students");
+        table = new Table(connection, "students");
         createTable();
     }
 
     @After
     public void tearDown() throws Exception {
-        queries.close();
+        table.close();
     }
 
     private void createTable() throws SQLException {
@@ -56,7 +56,7 @@ public class TestQueries {
 
     @Test
     public void insertInfoToTable() throws Exception {
-        queries.insert(1, "Iani", 23, 2);
+        table.insert(1, "Iani", 23, 2);
         ResultSet resultSet = createResultSet("select * from students where StudentID=1");
         String name = null;
         while (resultSet.next()) {
@@ -70,8 +70,8 @@ public class TestQueries {
     public void printTable() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        queries.insert(1, "Iani", 23, 3);
-        queries.printTable();
+        table.insert(1, "Iani", 23, 3);
+        table.printTable();
         String otuput = out.toString();
         assertTrue(otuput.contains("Iani"));
         System.setOut(System.out);
@@ -81,8 +81,8 @@ public class TestQueries {
 
     @Test
     public void updateInfo() throws Exception {
-        queries.insert(1, "Qnis", 5, 1);
-        queries.update(1, "Iani", 23, 3);
+        table.insert(1, "Qnis", 5, 1);
+        table.update(1, "Iani", 23, 3);
         ResultSet resultSet = createResultSet("select * from students where StudentID=1");
         String name = null;
         while (resultSet.next()) {
@@ -94,8 +94,8 @@ public class TestQueries {
 
     @Test
     public void selectingStudentsFromCourse() throws Exception {
-        queries.insert(1, "Iani", 23, 3);
-        queries.studentsFromCourse(3);
+        table.insert(1, "Iani", 23, 3);
+        table.studentsFromCourse(3);
         ResultSet resultSet = createResultSet("select * from students where Course=3");
         String name = null;
         while (resultSet.next()) {
@@ -109,9 +109,9 @@ public class TestQueries {
     public void deleteInfo() throws Exception {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        queries.insert(1, "Iani", 23, 3);
-        queries.delete(1);
-        queries.printTable();
+        table.insert(1, "Iani", 23, 3);
+        table.delete(1);
+        table.printTable();
         String output = out.toString();
         assertFalse(output.contains("Iani"));
         System.setOut(System.out);
@@ -121,7 +121,7 @@ public class TestQueries {
 
     @Test
     public void addColumn() throws Exception {
-        queries.addColumn("Location", "varchar(20)");
+        table.addColumn("Location", "varchar(20)", "DEFAULT NULL");
         ResultSet resultSet = createResultSet("select Location from students where StudentID=1");
         String studentLocation = null;
         while (resultSet.next()) {
@@ -133,7 +133,7 @@ public class TestQueries {
 
     @Test
     public void dropTable() throws Exception {
-        queries.dropTable();
+        table.dropTable();
         ResultSet resultSet = createResultSet("show tables");
         String studentTable = null;
         while (resultSet.next()) {
