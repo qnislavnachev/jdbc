@@ -21,15 +21,12 @@ import static org.junit.Assert.assertTrue;
 public class TestQueries {
     private Queries queries;
     private Connection connection;
-    private ResultSet resultSet;
-    private String actual = null;
-    private ByteArrayOutputStream out;
 
     @Before
     public void setUp() throws Exception {
-        out = new ByteArrayOutputStream();
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "iani");
         queries = new Queries(connection, "students");
+        createTable();
     }
 
     @After
@@ -37,78 +34,111 @@ public class TestQueries {
         queries.close();
     }
 
+    private void createTable() throws SQLException {
+        String tableQuery = "CREATE TABLE IF NOT EXISTS students (\n" +
+                "    StudentID   int(5)          NOT NULL,\n" +
+                "    Name        varchar(20)     NOT NULL,\n" +
+                "    Age         int(5)          NOT NULL,\n" +
+                "    Course      int(3)          NOT NULL,\n" +
+                "    PRIMARY KEY(StudentID)\n" +
+                ");";
+        connection.createStatement().executeUpdate(tableQuery);
+    }
+
+    private void dropStudentsTable() throws SQLException {
+        String query = "drop table students";
+        connection.createStatement().executeUpdate(query);
+    }
+
     private ResultSet createResultSet(String query) throws SQLException {
         return connection.createStatement().executeQuery(query);
     }
 
     @Test
-    public void printTable() throws Exception {
-        System.setOut(new PrintStream(out));
-        queries.printTable();
-        String otuput = out.toString();
-        assertTrue(otuput.contains("Iani"));
-        assertTrue(otuput.contains("Maggie"));
-        assertTrue(otuput.contains("Kika"));
-        System.setOut(System.out);
+    public void insertInfoToTable() throws Exception {
+        queries.insert(1, "Iani", 23, 2);
+        ResultSet resultSet = createResultSet("select * from students where StudentID=1");
+        String name = null;
+        while (resultSet.next()) {
+            name = resultSet.getString("Name");
+        }
+        assertThat(name, is("Iani"));
+        dropStudentsTable();
     }
 
     @Test
-    public void insertInfoToTable() throws Exception {
-        queries.insert(3, "Maggie", 18, 2);
-        resultSet = createResultSet("select * from students where StudentID=3");
-        while (resultSet.next()) {
-            actual = resultSet.getString("Name");
-        }
-        assertThat(actual, is("Maggie"));
+    public void printTable() throws Exception {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        queries.insert(1, "Iani", 23, 3);
+        queries.printTable();
+        String otuput = out.toString();
+        assertTrue(otuput.contains("Iani"));
+        System.setOut(System.out);
+        out.close();
+        dropStudentsTable();
     }
 
     @Test
     public void updateInfo() throws Exception {
+        queries.insert(1, "Qnis", 5, 1);
         queries.update(1, "Iani", 23, 3);
-        resultSet = createResultSet("select * from students where StudentID=1");
+        ResultSet resultSet = createResultSet("select * from students where StudentID=1");
+        String name = null;
         while (resultSet.next()) {
-            actual = resultSet.getString("Name");
+            name = resultSet.getString("Name");
         }
-        assertThat(actual, is("Iani"));
+        assertThat(name, is("Iani"));
+        dropStudentsTable();
     }
 
     @Test
     public void selectingStudentsFromCourse() throws Exception {
-        queries.selectStudentsFrom(3);
-        resultSet = createResultSet("select * from students where Course=3");
+        queries.insert(1, "Iani", 23, 3);
+        queries.studentsFromCourse(3);
+        ResultSet resultSet = createResultSet("select * from students where Course=3");
+        String name = null;
         while (resultSet.next()) {
-            actual = resultSet.getString("Name");
+            name = resultSet.getString("Name");
         }
-        assertThat(actual, is("Iani"));
+        assertThat(name, is("Iani"));
+        dropStudentsTable();
     }
 
     @Test
     public void deleteInfo() throws Exception {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        queries.delete(3);
+        queries.insert(1, "Iani", 23, 3);
+        queries.delete(1);
         queries.printTable();
         String output = out.toString();
-        assertFalse(output.contains("Maggie"));
+        assertFalse(output.contains("Iani"));
         System.setOut(System.out);
+        out.close();
+        dropStudentsTable();
     }
 
     @Test
     public void addColumn() throws Exception {
         queries.addColumn("Location", "varchar(20)");
-        resultSet = createResultSet("select Location from students where StudentID=1");
+        ResultSet resultSet = createResultSet("select Location from students where StudentID=1");
+        String studentLocation = null;
         while (resultSet.next()) {
-            actual = resultSet.getString("Location");
+            studentLocation = resultSet.getString("Location");
         }
-        assertThat(actual, is(nullValue()));
+        assertThat(studentLocation, is(nullValue()));
+        dropStudentsTable();
     }
 
     @Test
     public void dropTable() throws Exception {
         queries.dropTable();
-        resultSet = createResultSet("show tables");
+        ResultSet resultSet = createResultSet("show tables");
+        String studentTable = null;
         while (resultSet.next()) {
-            actual = resultSet.getString("Tables_in_db");
+            studentTable = resultSet.getString("Tables_in_db");
         }
-        assertThat(actual, is(nullValue()));
+        assertThat(studentTable, is(nullValue()));
     }
 }
