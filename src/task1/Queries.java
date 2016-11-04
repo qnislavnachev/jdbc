@@ -53,7 +53,7 @@ public class Queries {
         statement.executeUpdate(query);
     }
 
-    public void selectStudentsFrom(int course) throws SQLException {
+    public void studentsFromCourse(int course) throws SQLException {
         String query = "select * from " + table + " where Course like '" + course + "'";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
