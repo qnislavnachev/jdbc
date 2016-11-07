@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -56,7 +57,7 @@ public class TestQueries {
     }
 
     @Test
-    public void insertInfoToTable() throws Exception {
+    public void insertInfoToStudents() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
         ResultSet resultSet = createResultSet("select * from students where StudentID=1");
@@ -69,16 +70,11 @@ public class TestQueries {
     }
 
     @Test
-    public void printTable() throws Exception {
+    public void findStudents() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
         students.register(iani);
-        students.printTable();
-        String otuput = out.toString();
-        assertTrue(otuput.contains("Iani"));
-        System.setOut(System.out);
-        out.close();
+        List<Student> studentList = students.findStudents();
+        assertThat(studentList.get(0), is(iani));
         dropStudentsTable();
     }
 
@@ -113,15 +109,10 @@ public class TestQueries {
     @Test
     public void deleteInfo() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
         students.register(iani);
         students.delete(iani);
-        students.printTable();
-        String output = out.toString();
-        assertFalse(output.contains("Iani"));
-        System.setOut(System.out);
-        out.close();
+        List<Student> studentList = students.findStudents();
+        assertTrue(studentList.isEmpty());
         dropStudentsTable();
     }
 
@@ -138,8 +129,8 @@ public class TestQueries {
     }
 
     @Test
-    public void dropTable() throws Exception {
-        students.dropTable();
+    public void dropStudents() throws Exception {
+        students.dropStudentsTable();
         ResultSet resultSet = createResultSet("show tables");
         String studentTable = null;
         while (resultSet.next()) {
