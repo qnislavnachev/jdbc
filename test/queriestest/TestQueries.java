@@ -3,7 +3,8 @@ package queriestest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import task1.Table;
+import task1.Student;
+import task1.StudentsRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -19,19 +20,19 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class TestQueries {
-    private Table table;
+    private StudentsRepository students;
     private Connection connection;
 
     @Before
     public void setUp() throws Exception {
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "iani");
-        table = new Table(connection, "students");
+        students = new StudentsRepository(connection);
         createTable();
     }
 
     @After
     public void tearDown() throws Exception {
-        table.close();
+        students.close();
     }
 
     private void createTable() throws SQLException {
@@ -56,7 +57,8 @@ public class TestQueries {
 
     @Test
     public void insertInfoToTable() throws Exception {
-        table.insert(1, "Iani", 23, 2);
+        Student iani = new Student(1, "Iani", 23, 2);
+        students.register(iani);
         ResultSet resultSet = createResultSet("select * from students where StudentID=1");
         String name = null;
         while (resultSet.next()) {
@@ -68,10 +70,11 @@ public class TestQueries {
 
     @Test
     public void printTable() throws Exception {
+        Student iani = new Student(1, "Iani", 23, 2);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        table.insert(1, "Iani", 23, 3);
-        table.printTable();
+        students.register(iani);
+        students.printTable();
         String otuput = out.toString();
         assertTrue(otuput.contains("Iani"));
         System.setOut(System.out);
@@ -81,22 +84,24 @@ public class TestQueries {
 
     @Test
     public void updateInfo() throws Exception {
-        table.insert(1, "Qnis", 5, 1);
-        table.update(1, "Iani", 23, 3);
+        Student iani = new Student(1, "Iani", 23, 2);
+        students.register(iani);
+        students.update(iani, "Age=2");
         ResultSet resultSet = createResultSet("select * from students where StudentID=1");
-        String name = null;
+        int age = 0;
         while (resultSet.next()) {
-            name = resultSet.getString("Name");
+            age = resultSet.getInt("Age");
         }
-        assertThat(name, is("Iani"));
+        assertThat(age, is(2));
         dropStudentsTable();
     }
 
     @Test
     public void selectingStudentsFromCourse() throws Exception {
-        table.insert(1, "Iani", 23, 3);
-        table.studentsFromCourse(3);
-        ResultSet resultSet = createResultSet("select * from students where Course=3");
+        Student iani = new Student(1, "Iani", 23, 2);
+        students.register(iani);
+        students.studentsFromCourse(2);
+        ResultSet resultSet = createResultSet("select * from students where Course=2");
         String name = null;
         while (resultSet.next()) {
             name = resultSet.getString("Name");
@@ -107,11 +112,12 @@ public class TestQueries {
 
     @Test
     public void deleteInfo() throws Exception {
+        Student iani = new Student(1, "Iani", 23, 2);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        table.insert(1, "Iani", 23, 3);
-        table.delete(1);
-        table.printTable();
+        students.register(iani);
+        students.delete(iani);
+        students.printTable();
         String output = out.toString();
         assertFalse(output.contains("Iani"));
         System.setOut(System.out);
@@ -121,7 +127,7 @@ public class TestQueries {
 
     @Test
     public void addColumn() throws Exception {
-        table.addColumn("Location", "varchar(20)", "DEFAULT NULL");
+        students.addColumn("Location", "varchar(20)", "DEFAULT NULL");
         ResultSet resultSet = createResultSet("select Location from students where StudentID=1");
         String studentLocation = null;
         while (resultSet.next()) {
@@ -133,7 +139,7 @@ public class TestQueries {
 
     @Test
     public void dropTable() throws Exception {
-        table.dropTable();
+        students.dropTable();
         ResultSet resultSet = createResultSet("show tables");
         String studentTable = null;
         while (resultSet.next()) {

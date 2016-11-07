@@ -1,21 +1,20 @@
 package task1;
 
 import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
 
-public class Table {
+public class StudentsRepository {
     private Statement statement;
-    private Connection connection ;
-    private String table;
+    private Connection connection;
 
-
-    public Table(Connection connection, String table) throws SQLException {
-        this.table = table;
+    public StudentsRepository(Connection connection) throws SQLException {
         this.connection = connection;
         statement = connection.createStatement();
     }
 
     public void printTable() throws SQLException {
-        String query = "select * from " + table;
+        String query = "select * from students";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             System.out.println(resultSet.getInt("StudentID") + " " +
@@ -25,36 +24,34 @@ public class Table {
         }
     }
 
-    public void update(int ID, String newName, int newAge, int newCourse) throws SQLException {
-        String query = "update " + table + " set Name='" + newName + "'" +
-                ", Age=" + newAge + ", Course=" + newCourse +
-                " where StudentID=" + ID;
+    public void update(Student student, String updateInfo) throws SQLException {
+        String query = "update students set " + updateInfo + " where StudentID=" + student.ID;
         statement.executeUpdate(query);
     }
 
-    public void delete(int ID) throws SQLException {
-        String query = "delete from " + table + " where StudentID=" + ID;
+    public void delete(Student student) throws SQLException {
+        String query = "delete from students where StudentID=" + student.ID;
         statement.executeUpdate(query);
     }
 
-    public void insert(int ID, String name, int age, int course) throws SQLException {
-        String query = "insert into " + table + " (StudentID, Name, Age, Course)" +
-                " values (" + ID + ", '" + name + "', " + age + ", " + course + ")";
+    public void register(Student student) throws SQLException {
+        String query = "insert into students (StudentID, Name, Age, Course)" +
+                " values (" + student.ID + ", '" + student.name + "', " + student.age + ", " + student.course + ")";
         statement.executeUpdate(query);
     }
 
     public void dropTable() throws SQLException {
-        String query = "drop table " + table;
+        String query = "drop table students";
         statement.executeUpdate(query);
     }
 
     public void addColumn(String columnName, String dataType, String value) throws SQLException {
-        String query = "alter table " + table + " add " + columnName + " " + dataType + " " + value;
+        String query = "alter table students add " + columnName + " " + dataType + " " + value;
         statement.executeUpdate(query);
     }
 
     public void studentsFromCourse(int course) throws SQLException {
-        String query = "select * from " + table + " where Course like '" + course + "'";
+        String query = "select * from students where Course like '" + course + "'";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             System.out.println(resultSet.getString("Name"));
