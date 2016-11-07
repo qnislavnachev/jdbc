@@ -3,6 +3,8 @@ package task1;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentsRepository {
     private Statement statement;
@@ -13,15 +15,18 @@ public class StudentsRepository {
         statement = connection.createStatement();
     }
 
-    public void printTable() throws SQLException {
+    public List<Student> findStudents() throws SQLException {
+        List<Student> list = new ArrayList<>();
         String query = "select * from students";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
-            System.out.println(resultSet.getInt("StudentID") + " " +
-                    resultSet.getString("Name") + " " +
-                    resultSet.getInt("Age") + " " +
+            Student student = new Student(resultSet.getInt("StudentID"),
+                    resultSet.getString("Name"),
+                    resultSet.getInt("Age"),
                     resultSet.getInt("Course"));
+            list.add(student);
         }
+        return list;
     }
 
     public void update(Student student, String updateInfo) throws SQLException {
@@ -40,7 +45,7 @@ public class StudentsRepository {
         statement.executeUpdate(query);
     }
 
-    public void dropTable() throws SQLException {
+    public void dropStudentsTable() throws SQLException {
         String query = "drop table students";
         statement.executeUpdate(query);
     }
