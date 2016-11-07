@@ -6,8 +6,6 @@ import org.junit.Test;
 import task1.Student;
 import task1.StudentsRepository;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,7 +14,6 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -60,12 +57,9 @@ public class TestQueries {
     public void insertInfoToStudents() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
-        ResultSet resultSet = createResultSet("select * from students where StudentID=1");
-        String name = null;
-        while (resultSet.next()) {
-            name = resultSet.getString("Name");
-        }
-        assertThat(name, is("Iani"));
+        List<Student> allStudents = students.findStudents();
+        assertThat(allStudents.size(), is(1));
+        assertThat(allStudents.get(0).name, is("Iani"));
         dropStudentsTable();
     }
 
@@ -74,7 +68,7 @@ public class TestQueries {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
         List<Student> studentList = students.findStudents();
-        assertThat(studentList.get(0), is(iani));
+        assertThat(studentList.size(), is(1));
         dropStudentsTable();
     }
 
@@ -83,12 +77,8 @@ public class TestQueries {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
         students.update(iani, "Age=2");
-        ResultSet resultSet = createResultSet("select * from students where StudentID=1");
-        int age = 0;
-        while (resultSet.next()) {
-            age = resultSet.getInt("Age");
-        }
-        assertThat(age, is(2));
+        List<Student> allStudents = students.findStudents();
+        assertThat(allStudents.get(0).age, is(2));
         dropStudentsTable();
     }
 
@@ -96,13 +86,9 @@ public class TestQueries {
     public void selectingStudentsFromCourse() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
-        students.studentsFromCourse(2);
-        ResultSet resultSet = createResultSet("select * from students where Course=2");
-        String name = null;
-        while (resultSet.next()) {
-            name = resultSet.getString("Name");
-        }
-        assertThat(name, is("Iani"));
+        List<Student> studentsFromCourse = students.studentsFromCourse(2);
+        assertThat(studentsFromCourse.size(), is(1));
+        assertThat(studentsFromCourse.get(0).name, is("Iani"));
         dropStudentsTable();
     }
 
