@@ -76,7 +76,7 @@ public class TestQueries {
     public void updateInfo() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
-        students.update(iani, "Age=2");
+        students.updateByID(1, "Age=2");
         List<Student> allStudents = students.findStudents();
         assertThat(allStudents.get(0).age, is(2));
         dropStudentsTable();
@@ -96,7 +96,7 @@ public class TestQueries {
     public void deleteInfo() throws Exception {
         Student iani = new Student(1, "Iani", 23, 2);
         students.register(iani);
-        students.delete(iani);
+        students.deleteByID(1);
         List<Student> studentList = students.findStudents();
         assertTrue(studentList.isEmpty());
         dropStudentsTable();
