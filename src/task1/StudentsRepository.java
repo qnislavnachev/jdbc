@@ -18,20 +18,21 @@ public class StudentsRepository {
         return getStudentsFrom(query);
     }
 
-    public void update(Student student, String updateInfo) {
-        String query = "update students set " + updateInfo + " where StudentID=" + student.ID;
+    public void updateByID(int ID, String updateInfo) {
+        String query = "update students set " + updateInfo + " where StudentID=" + ID;
         execute(query);
     }
 
-    public void delete(Student student) {
-        String query = "delete from students where StudentID=" + student.ID;
+    public void deleteByID(int ID) {
+        String query = "delete from students where StudentID=" + ID;
         execute(query);
     }
 
-    public void register(Student student) {
+    public Student register(Student student) {
         String query = "insert into students (StudentID, Name, Age, Course)" +
                 " values (" + student.ID + ", '" + student.name + "', " + student.age + ", " + student.course + ")";
         execute(query);
+        return student;
     }
 
     public void dropStudentsTable() {
