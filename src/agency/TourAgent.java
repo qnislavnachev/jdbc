@@ -5,6 +5,7 @@ import core.City;
 import core.Person;
 import core.Trip;
 
+import java.util.Date;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class TourAgent implements TravelAgency {
     }
 
     @Override
-    public void scheduleTrip(Person person, String city, String from, String to) {
+    public void scheduleTrip(Person person, String city, Date from, Date to) {
         String insertPerson = "insert into People values (?, ?, ? ,?)";
         String insertTrip = "insert into Trip values (?, ?, ? ,?)";
         try {
@@ -47,15 +48,15 @@ public class TourAgent implements TravelAgency {
     }
 
     @Override
-    public List<Person> findPersonsGotSameTrip(String from, String to, String city) {
+    public List<Person> findPersonsGotSameTrip(Date from, Date to, String city) {
         String query = "select People.* from People inner join Trip" +
                 " on Trip.PersonID = People.PersonID" +
                 " where Trip.ArrivalDate <= ? " +
                 "and Trip.DepartureDate >= ? and Trip.City = ?";
         List<Person> list = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, from);
-            statement.setString(2, to);
+            statement.setString(1, toSqlDate(from).toString());
+            statement.setString(2, toSqlDate(to).toString());
             statement.setString(3, city);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -65,6 +66,10 @@ public class TourAgent implements TravelAgency {
             e.printStackTrace();
         }
         return list;
+    }
+
+    private java.sql.Date toSqlDate(Date date) {
+        return new java.sql.Date(date.getTime());
     }
 
     private void rollback() {
@@ -89,8 +94,8 @@ public class TourAgent implements TravelAgency {
     private void executeTripInsert(String query, Trip trip) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, trip.personID);
-        statement.setString(2, trip.arrivalDate);
-        statement.setString(3, trip.departureDate);
+        statement.setString(2, toSqlDate(trip.arrivalDate).toString());
+        statement.setString(3, toSqlDate(trip.departureDate).toString());
         statement.setString(4, trip.city);
         statement.executeUpdate();
         statement.close();
