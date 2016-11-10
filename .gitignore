@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 #MyIgnore
 .idea/workspace.xml
+=======
+# MyIgnore
+>>>>>>> 2e11d80af7df44c873c6196a5dcbeca1559b745e
 .idea/
 out/
 *.xml
