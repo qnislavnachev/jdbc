@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface TravelAgency {
 
-    void scheduleTrip(Person person, String city, Date from, Date to) throws SQLException;
+    void scheduleTrip(Person person, String city, String from, String to) throws SQLException;
 
     List<City> findAllVisitedDestination();
 
-    List<Person> findPersonsGotSameTrip(Date from, Date to, String city);
+    List<Person> findPersonsGotSameTrip(String from, String to, String city);
 }

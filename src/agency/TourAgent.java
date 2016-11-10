@@ -17,13 +17,13 @@ public class TourAgent implements TravelAgency {
     }
 
     @Override
-    public void scheduleTrip(Person person, String city, Date from, Date to) {
+    public void scheduleTrip(Person person, String city, String from, String to) {
         String insertPerson = "insert into People values (?, ?, ? ,?)";
         String insertTrip = "insert into Trip values (?, ?, ? ,?)";
         try {
             connection.setAutoCommit(false);
-            execute(insertPerson, person);
-            execute(insertTrip, new Trip(person.id, from, to, city));
+            executePersonInsert(insertPerson, person);
+            executeTripInsert(insertTrip, new Trip(person.id, from, to, city));
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,15 +47,15 @@ public class TourAgent implements TravelAgency {
     }
 
     @Override
-    public List<Person> findPersonsGotSameTrip(Date from, Date to, String city) {
+    public List<Person> findPersonsGotSameTrip(String from, String to, String city) {
         String query = "select People.* from People inner join Trip" +
                 " on Trip.PersonID = People.PersonID" +
                 " where Trip.ArrivalDate <= ? " +
                 "and Trip.DepartureDate >= ? and Trip.City = ?";
         List<Person> list = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setDate(1, from);
-            statement.setDate(2, to);
+            statement.setString(1, from);
+            statement.setString(2, to);
             statement.setString(3, city);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -75,26 +75,24 @@ public class TourAgent implements TravelAgency {
         }
     }
 
-    private void execute(String query, Object o) throws SQLException {
-        if (o instanceof Person) {
-            Person person = (Person) o;
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setObject(1, person.id);
-            statement.setObject(2, person.name);
-            statement.setObject(3, person.age);
-            statement.setObject(4, person.email);
-            statement.executeUpdate();
-            statement.close();
-        }
-        if (o instanceof Trip) {
-            Trip trip = (Trip) o;
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setObject(1, trip.personID);
-            statement.setObject(2, trip.arrivalDate);
-            statement.setObject(3, trip.departureDate);
-            statement.setObject(4, trip.city);
-            statement.executeUpdate();
-            statement.close();
-        }
+    private void executePersonInsert(String query, Person person) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, person.id);
+        statement.setString(2, person.name);
+        statement.setInt(3, person.age);
+        statement.setString(4, person.email);
+        statement.executeUpdate();
+        statement.close();
+    }
+
+
+    private void executeTripInsert(String query, Trip trip) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, trip.personID);
+        statement.setString(2, trip.arrivalDate);
+        statement.setString(3, trip.departureDate);
+        statement.setString(4, trip.city);
+        statement.executeUpdate();
+        statement.close();
     }
 }

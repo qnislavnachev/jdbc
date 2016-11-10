@@ -35,9 +35,4 @@ public class Person {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "personID= " + id + ", Name= " + name + ", Age= " + age + ", E-mail= " + email;
-    }
 }

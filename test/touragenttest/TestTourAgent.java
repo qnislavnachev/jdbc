@@ -41,9 +41,9 @@ public class TestTourAgent {
         Person maggie = new Person(1, "Maggie", 20, "maggie@gmail.com");
         Person kika = new Person(2, "Kika", 22, "kika@gmail.com");
 
-        agent.scheduleTrip(iani, "sofia", getDate("8-11-2016"), getDate("12-11-2016"));
-        agent.scheduleTrip(maggie, "varna", getDate("9-11-2016"), getDate("30-11-2016"));
-        agent.scheduleTrip(kika, "varna", getDate("20-11-2016"), getDate("25-11-2016"));
+        agent.scheduleTrip(iani, "sofia", "8-11-2016", "12-11-2016");
+        agent.scheduleTrip(maggie, "varna", "9-11-2016", "30-11-2016");
+        agent.scheduleTrip(kika, "varna", "20-11-2016", "25-11-2016");
 
         List<City> trips = agent.findAllVisitedDestination();
 
@@ -58,11 +58,11 @@ public class TestTourAgent {
         Person maggie = new Person(1, "Maggie", 20, "maggie@gmail.com");
         Person kika = new Person(2, "Kika", 22, "kika@gmail.com");
 
-        agent.scheduleTrip(iani, "sofia", getDate("8-11-2016"), getDate("15-11-2016"));
-        agent.scheduleTrip(maggie, "sofia", getDate("9-11-2016"), getDate("30-11-2016"));
-        agent.scheduleTrip(kika, "sofia", getDate("20-11-2016"), getDate("25-11-2016"));
+        agent.scheduleTrip(iani, "sofia", "8-11-2016", "15-11-2016");
+        agent.scheduleTrip(maggie, "sofia", "9-11-2016", "30-11-2016");
+        agent.scheduleTrip(kika, "sofia", "20-11-2016", "25-11-2016");
 
-        List<Person> persons = agent.findPersonsGotSameTrip(getDate("12-11-2016"), getDate("14-11-2016"), "sofia");
+        List<Person> persons = agent.findPersonsGotSameTrip("12-11-2016", "14-11-2016", "sofia");
 
         assertThat(persons.size(), is(2));
         assertThat(persons.contains(kika), is(false));
@@ -95,10 +95,5 @@ public class TestTourAgent {
         connection.createStatement().executeUpdate(query);
         query = "drop table People";
         connection.createStatement().executeUpdate(query);
-    }
-
-    private Date getDate(String date) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return new Date(dateFormat.parse(date).getTime());
     }
 }
