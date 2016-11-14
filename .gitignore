@@ -1,4 +1,4 @@
-#MyIgnore
+# MyIgnore
 .idea/
 out/
 *.xml
