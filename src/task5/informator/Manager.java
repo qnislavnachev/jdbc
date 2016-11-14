@@ -5,14 +5,15 @@ import task5.core.Contact;
 import task5.core.User;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Manager implements Database {
     private Connection connection;
+    private Adapter adapter;
 
     public Manager(Connection connection) {
         this.connection = connection;
+        adapter = new Adapter();
     }
 
     @Override
@@ -36,49 +37,34 @@ public class Manager implements Database {
     @Override
     public List<User> findAllUsers() {
         String query = "select * from Users";
-        return getAdaptedList(query, Objects.USER);
+        return adapter.listAdapter(connection, query, new ResultSetAdapter<User>() {
+            @Override
+            public User adapt(ResultSet rs) throws SQLException {
+                return new User(rs.getInt(1), rs.getString(2), rs.getInt(3));
+            }
+        });
     }
 
     @Override
     public List<Contact> findAllContacts() {
         String query = "select * from Contacts";
-        return getAdaptedList(query, Objects.CONTACT);
+        return adapter.listAdapter(connection, query, new ResultSetAdapter<Contact>() {
+            @Override
+            public Contact adapt(ResultSet rs) throws SQLException {
+                return new Contact(rs.getInt(1), rs.getString(2));
+            }
+        });
     }
 
     @Override
     public List<Address> findAllAddresses() {
         String query = "select * from Addresses";
-        return getAdaptedList(query, Objects.ADDRESS);
-    }
-
-    private List getAdaptedList(String query, Enum e) {
-        try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery(query);
-            if (e.equals(Objects.USER)) {
-                List<User> list = new ArrayList<>();
-                while (rs.next()) {
-                    list.add(new User(rs.getInt(1), rs.getString(2), rs.getInt(3)));
-                }
-                return list;
+        return adapter.listAdapter(connection, query, new ResultSetAdapter<Address>() {
+            @Override
+            public Address adapt(ResultSet resultSetAdapter) throws SQLException {
+                return new Address(resultSetAdapter.getString(1));
             }
-            if (e.equals(Objects.CONTACT)) {
-                List<Contact> list = new ArrayList<>();
-                while (rs.next()) {
-                    list.add(new Contact(rs.getInt(1), rs.getString(2)));
-                }
-                return list;
-            }
-            if (e.equals(Objects.ADDRESS)) {
-                List<Address> list = new ArrayList<>();
-                while (rs.next()) {
-                    list.add(new Address(rs.getString(2)));
-                }
-                return list;
-            }
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        return null;
+        });
     }
 
     private void insertUser(String query, User user) {
