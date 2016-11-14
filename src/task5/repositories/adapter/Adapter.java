@@ -1,4 +1,4 @@
-package task5.informator;
+package task5.repositories.adapter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
